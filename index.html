@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>科技日报 | 2026-03-04</title>
+    <title>科技芯声 | 2026-03-04</title>
     <style>
         * {
             margin: 0;
@@ -282,12 +282,54 @@
 
         .calendar-day.today {
             border: 2px solid #00d4ff;
-            background: rgba(0, 212, 255, 0.2);
+            background: rgba(0, 212, 255, 0.15);
+            position: relative;
+        }
+        
+        .calendar-day.today::after {
+            content: '今';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #00d4ff;
+            color: #fff;
+            font-size: 10px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-day.current-page {
+            border: 3px solid #2ed573;
+            background: rgba(46, 213, 115, 0.3);
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .calendar-day.current-page::after {
+            content: '当前';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2ed573;
+            color: #fff;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            white-space: nowrap;
         }
 
         .calendar-day.has-content {
             background: rgba(46, 213, 115, 0.2);
             color: #2ed573;
+        }
+        
+        .calendar-day.has-content.current-page {
+            background: rgba(46, 213, 115, 0.3);
         }
 
         .calendar-day.has-content:hover {
@@ -661,6 +703,8 @@
             .calendar-grid { gap: 3px; }
             .calendar-day { font-size: 13px; }
             .calendar-weekday { font-size: 11px; }
+            .calendar-day.current-page::after,
+            .calendar-day.today::after { font-size: 9px; }
             
             /* 容器和板块 */
             .container { padding: 20px 12px; }
@@ -1100,9 +1144,27 @@
         // 可用的日期列表（由生成脚本填充）
         const AVAILABLE_DATES = [];
         
+        // 当前页面日期（从 URL 或页面内容提取）
+        let currentPageDate = null;
+        
         // 当前选中的年月
         let currentYear = new Date().getFullYear();
         let currentMonth = new Date().getMonth();
+        
+        // 提取当前页面日期
+        function extractCurrentPageDate() {
+            // 从 URL 提取（digest-YYYYMMDD.html）
+            const urlMatch = window.location.href.match(/digest-(\d{4})(\d{2})(\d{2})\.html/);
+            if (urlMatch) {
+                return {
+                    year: parseInt(urlMatch[1]),
+                    month: parseInt(urlMatch[2]) - 1,
+                    day: parseInt(urlMatch[3]),
+                    dateStr: urlMatch[1] + urlMatch[2] + urlMatch[3]
+                };
+            }
+            return null;
+        }
         
         // 创建背景粒子
         function createParticles() {
@@ -1162,21 +1224,32 @@
                 // 格式化日期为 YYYYMMDD
                 const dateStr = `${year}${String(month + 1).padStart(2, '0')}${String(day).padStart(2, '0')}`;
                 
-                // 检查是否是今天
+                // 检查是否是当前页面日期（高亮显示）
+                if (currentPageDate && dateStr === currentPageDate.dateStr) {
+                    div.classList.add('current-page');
+                    div.title = `当前页面：${year}-${month + 1}-${day}`;
+                }
+                
+                // 检查是否是今天（特殊标识）
                 if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
                     div.classList.add('today');
+                    div.title = `今天：${year}-${month + 1}-${day}`;
                 }
                 
                 // 检查是否有内容
                 if (AVAILABLE_DATES.includes(dateStr)) {
                     div.classList.add('has-content');
-                    div.title = `查看 ${year}-${month + 1}-${day} 的资讯`;
+                    if (!div.classList.contains('current-page')) {
+                        div.title = `查看 ${year}-${month + 1}-${day} 的资讯`;
+                    }
                     div.onclick = () => {
                         window.location.href = `digest-${dateStr}.html`;
                     };
                 } else {
                     div.classList.add('disabled');
-                    div.title = '暂无资讯';
+                    if (!div.title) {
+                        div.title = '暂无资讯';
+                    }
                 }
                 
                 grid.appendChild(div);
@@ -1185,8 +1258,14 @@
         
         // 初始化日历
         function initCalendar() {
-            // 从 README.md 加载可用日期（简化版：直接检查文件是否存在）
-            // 实际使用时，可以在生成网页时动态注入 AVAILABLE_DATES
+            // 提取当前页面日期
+            currentPageDate = extractCurrentPageDate();
+            
+            // 如果有当前页面日期，从该日期开始显示
+            if (currentPageDate) {
+                currentYear = currentPageDate.year;
+                currentMonth = currentPageDate.month;
+            }
             
             const prevBtn = document.getElementById('prev-month');
             const nextBtn = document.getElementById('next-month');
