@@ -427,32 +427,80 @@
             transition: width 0.1s ease;
         }
 
-        /* 响应式 */
+        /* 响应式 - 手机端优化 */
         @media (max-width: 768px) {
-            .brand { font-size: 36px; }
-            .section { padding: 20px; }
-            .section-title { font-size: 22px; }
+            /* 报头区域 */
+            .brand { font-size: 32px; }
+            .subtitle { font-size: 14px; }
+            .masthead { padding: 25px 15px; margin-bottom: 30px; }
+            .meta-info { gap: 10px; }
+            .meta-item { font-size: 12px; padding: 5px 10px; }
+            
+            /* 容器和板块 */
+            .container { padding: 20px 12px; }
+            .section { padding: 20px 15px; margin-bottom: 20px; }
+            .section-header { margin-bottom: 20px; padding-bottom: 12px; }
+            .section-icon { font-size: 24px; }
+            .section-title { font-size: 20px; }
+            .section-desc { font-size: 13px; }
+            
+            /* 导航标签 */
+            .nav-tabs { gap: 8px; margin-bottom: 25px; }
+            .nav-tab { padding: 8px 16px; font-size: 13px; }
+            
+            /* 文章卡片 */
+            .article-card { padding: 18px 15px; margin-bottom: 18px; }
             .article-title { 
-                font-size: 18px; 
+                font-size: 16px; 
                 min-width: 100%;
                 order: -1;
-                margin-bottom: 10px;
+                margin-bottom: 8px;
+                line-height: 1.4;
             }
             .article-header {
                 flex-direction: column;
-                gap: 10px;
+                gap: 8px;
             }
             .article-meta {
                 width: 100%;
+                font-size: 12px;
+                gap: 10px;
             }
+            .article-summary { font-size: 14px; line-height: 1.6; }
+            .article-detail { 
+                font-size: 13px; 
+                padding: 12px;
+                line-height: 1.6;
+            }
+            .expand-btn { font-size: 13px; }
+            .tag { font-size: 11px; padding: 3px 8px; }
+            
+            /* 数据卡片 */
+            .data-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 12px;
+            }
+            .data-card { padding: 18px 12px; }
+            .data-value { font-size: 28px; }
+            .data-label { font-size: 12px; }
+            .data-trend { font-size: 11px; }
+            
+            /* 冷幽默卡片 */
+            .humor-card { padding: 18px 15px; margin-bottom: 15px; }
+            .humor-text { font-size: 14px; line-height: 1.6; }
+            .humor-emoji { font-size: 18px; }
+            
+            /* 底部 */
+            .footer { padding: 25px 15px; font-size: 12px; }
+        }
+        
+        /* 超小屏幕（<375px） */
+        @media (max-width: 375px) {
+            .brand { font-size: 28px; }
+            .section-title { font-size: 18px; }
+            .article-title { font-size: 15px; }
             .data-grid { grid-template-columns: 1fr; }
-            .meta-info {
-                gap: 15px;
-            }
-            .meta-item {
-                font-size: 13px;
-                padding: 6px 12px;
-            }
+            .nav-tabs { flex-wrap: wrap; }
         }
     </style>
 </head>
