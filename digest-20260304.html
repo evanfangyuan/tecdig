@@ -123,6 +123,108 @@
             border: 1px solid rgba(0, 212, 255, 0.3);
         }
 
+        /* 日历组件 */
+        .calendar-container {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-nav button {
+            background: rgba(0, 212, 255, 0.2);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            color: #00d4ff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-nav button:hover {
+            background: rgba(0, 212, 255, 0.3);
+        }
+
+        .calendar-nav button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-weekday {
+            text-align: center;
+            font-size: 12px;
+            color: #8888aa;
+            padding: 8px 0;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ccccdd;
+        }
+
+        .calendar-day:hover:not(.disabled) {
+            background: rgba(0, 212, 255, 0.3);
+            color: #fff;
+        }
+
+        .calendar-day.today {
+            border: 2px solid #00d4ff;
+            background: rgba(0, 212, 255, 0.2);
+        }
+
+        .calendar-day.has-content {
+            background: rgba(46, 213, 115, 0.2);
+            color: #2ed573;
+        }
+
+        .calendar-day.has-content:hover {
+            background: rgba(46, 213, 115, 0.4);
+        }
+
+        .calendar-day.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .calendar-day.empty {
+            background: transparent;
+            cursor: default;
+        }
+
         /* 导航栏 */
         .nav-tabs {
             display: flex;
@@ -515,7 +617,26 @@
             <h1 class="brand">📰 科技芯声</h1>
             <p class="subtitle">Tech Core Voice</p>
             <div class="meta-info">
-                <div class="meta-item">📅 2026-03-04 星期二</div>
+                <div class="meta-item">📅 <span id="current-date">2026-03-04 星期二</span></div>
+            </div>
+            
+            <!-- 日历组件 -->
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <div class="calendar-title" id="calendar-month">2026 年 3 月</div>
+                    <div class="calendar-nav">
+                        <button id="prev-month" title="上个月">◀</button>
+                        <button id="today-btn" title="回到今天">今天</button>
+                        <button id="next-month" title="下个月">▶</button>
+                    </div>
+                </div>
+                <div class="calendar-grid" id="calendar-grid">
+                    <!-- 日历由 JavaScript 动态生成 -->
+                </div>
+                <div style="text-align: center; margin-top: 12px; font-size: 12px; color: #8888aa;">
+                    <span style="display: inline-block; width: 12px; height: 12px; background: rgba(46, 213, 115, 0.2); border-radius: 3px; margin-right: 5px;"></span>有资讯
+                    <span style="display: inline-block; width: 12px; height: 12px; background: rgba(0, 212, 255, 0.2); border: 2px solid #00d4ff; border-radius: 3px; margin-left: 15px; margin-right: 5px;"></span>今天
+                </div>
             </div>
         </header>
 
@@ -834,6 +955,13 @@
     </div>
 
     <script>
+        // 可用的日期列表（由生成脚本填充）
+        const AVAILABLE_DATES = ;
+        
+        // 当前选中的年月
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth();
+        
         // 创建背景粒子
         function createParticles() {
             const container = document.getElementById('particles');
@@ -847,6 +975,108 @@
                 particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
                 container.appendChild(particle);
             }
+        }
+        
+        // 生成日历
+        function generateCalendar(year, month) {
+            const grid = document.getElementById('calendar-grid');
+            const monthTitle = document.getElementById('calendar-month');
+            const today = new Date();
+            
+            // 更新月份标题
+            monthTitle.textContent = `${year}年${month + 1}月`;
+            
+            // 清空网格
+            grid.innerHTML = '';
+            
+            // 添加星期标题
+            const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+            weekdays.forEach(day => {
+                const div = document.createElement('div');
+                div.className = 'calendar-weekday';
+                div.textContent = day;
+                grid.appendChild(div);
+            });
+            
+            // 获取当月第一天和最后一天
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startDay = firstDay.getDay(); // 0-6 (周日 - 周六)
+            const totalDays = lastDay.getDate();
+            
+            // 添加空白单元格（第一天之前的）
+            for (let i = 0; i < startDay; i++) {
+                const div = document.createElement('div');
+                div.className = 'calendar-day empty';
+                grid.appendChild(div);
+            }
+            
+            // 添加日期
+            for (let day = 1; day <= totalDays; day++) {
+                const div = document.createElement('div');
+                div.className = 'calendar-day';
+                div.textContent = day;
+                
+                // 格式化日期为 YYYYMMDD
+                const dateStr = `${year}${String(month + 1).padStart(2, '0')}${String(day).padStart(2, '0')}`;
+                
+                // 检查是否是今天
+                if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+                    div.classList.add('today');
+                }
+                
+                // 检查是否有内容
+                if (AVAILABLE_DATES.includes(dateStr)) {
+                    div.classList.add('has-content');
+                    div.title = `查看 ${year}-${month + 1}-${day} 的资讯`;
+                    div.onclick = () => {
+                        window.location.href = `digest-${dateStr}.html`;
+                    };
+                } else {
+                    div.classList.add('disabled');
+                    div.title = '暂无资讯';
+                }
+                
+                grid.appendChild(div);
+            }
+        }
+        
+        // 初始化日历
+        function initCalendar() {
+            // 从 README.md 加载可用日期（简化版：直接检查文件是否存在）
+            // 实际使用时，可以在生成网页时动态注入 AVAILABLE_DATES
+            
+            const prevBtn = document.getElementById('prev-month');
+            const nextBtn = document.getElementById('next-month');
+            const todayBtn = document.getElementById('today-btn');
+            
+            prevBtn.onclick = () => {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                generateCalendar(currentYear, currentMonth);
+            };
+            
+            nextBtn.onclick = () => {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                generateCalendar(currentYear, currentMonth);
+            };
+            
+            todayBtn.onclick = () => {
+                const today = new Date();
+                currentYear = today.getFullYear();
+                currentMonth = today.getMonth();
+                generateCalendar(currentYear, currentMonth);
+            };
+            
+            // 生成初始日历
+            generateCalendar(currentYear, currentMonth);
         }
 
         // 滚动进度条
@@ -918,6 +1148,7 @@
         // 初始化
         document.addEventListener('DOMContentLoaded', () => {
             createParticles();
+            initCalendar();
             initExpandCards();
             initNavTabs();
             handleScrollAnimation();
