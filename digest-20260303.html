@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科技日报 | 2026-03-03</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #0c0c1e 0%, #1a1a3e 50%, #0f0f2d 100%);
+            min-height: 100vh;
+            color: #e0e0ff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* 背景效果 */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00d4ff;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 报头区域 */
+        .masthead {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .brand {
+            font-size: 56px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #00d4ff, #7b2ff7, #00d4ff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 3s ease infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes gradient {
+            0%, 100% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #8888aa;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #00d4ff;
+        }
+
+        /* 日期选择器（整合到日期显示） */
+        .date-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 212, 255, 0.15);
+            padding: 6px 14px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .date-display:hover {
+            background: rgba(0, 212, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .date-display-text {
+            color: #00d4ff;
+            font-size: 14px;
+        }
+
+        .date-picker-icon {
+            font-size: 16px;
+            opacity: 0.8;
+            transition: transform 0.3s ease;
+        }
+
+        .date-display:hover .date-picker-icon {
+            transform: scale(1.1);
+        }
+
+        /* 日历模态框 */
+        .calendar-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .calendar-modal.show {
+            display: flex;
+        }
+
+        .calendar-modal-content {
+            background: linear-gradient(135deg, #1a1a3e 0%, #0f0f2d 100%);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 16px;
+            padding: 25px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.2);
+        }
+
+        .calendar-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-modal-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .calendar-modal-close {
+            background: transparent;
+            border: none;
+            color: #8888aa;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0 5px;
+            transition: color 0.3s ease;
+        }
+
+        .calendar-modal-close:hover {
+            color: #fff;
+        }
+
+        .calendar-container {
+            margin-bottom: 15px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-nav button {
+            background: rgba(0, 212, 255, 0.2);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            color: #00d4ff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-nav button:hover {
+            background: rgba(0, 212, 255, 0.3);
+        }
+
+        .calendar-nav button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-weekday {
+            text-align: center;
+            font-size: 12px;
+            color: #8888aa;
+            padding: 8px 0;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ccccdd;
+        }
+
+        .calendar-day:hover:not(.disabled) {
+            background: rgba(0, 212, 255, 0.3);
+            color: #fff;
+        }
+
+        .calendar-day.today {
+            border: 2px solid #00d4ff;
+            background: rgba(0, 212, 255, 0.2);
+        }
+
+        .calendar-day.has-content {
+            background: rgba(46, 213, 115, 0.2);
+            color: #2ed573;
+        }
+
+        .calendar-day.has-content:hover {
+            background: rgba(46, 213, 115, 0.4);
+        }
+
+        .calendar-day.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .calendar-day.empty {
+            background: transparent;
+            cursor: default;
+        }
+
+        .calendar-legend {
+            text-align: center;
+            font-size: 12px;
+            color: #8888aa;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .legend-dot.has-content {
+            background: rgba(46, 213, 115, 0.4);
+        }
+
+        .legend-dot.today {
+            border: 2px solid #00d4ff;
+            background: rgba(0, 212, 255, 0.2);
+        }
+
+        /* 导航栏 */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 15px;
+            color: #aaaacc;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+            color: #00d4ff;
+            transform: translateY(-2px);
+        }
+
+        /* 板块样式 */
+        .section {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 35px;
+            margin-bottom: 35px;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-icon {
+            font-size: 32px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .section-title.news { color: #00d4ff; }
+        .section-title.solution { color: #2ed573; }
+        .section-title.industry { color: #ffa502; }
+        .section-title.risk { color: #ff4757; }
+        .section-title.data { color: #7b2ff7; }
+        .section-title.humor { color: #9b59b6; }
+
+        .section-desc {
+            font-size: 15px;
+            color: #8888aa;
+            margin-top: 5px;
+        }
+
+        /* 新闻卡片 */
+        .article-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .article-card:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .article-card.news { border-color: #00d4ff; }
+        .article-card.solution { border-color: #2ed573; }
+        .article-card.industry { border-color: #ffa502; }
+        .article-card.risk { border-color: #ff4757; }
+        .article-card.humor { border-color: #9b59b6; }
+
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .article-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            flex: 1;
+            min-width: 100%;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 13px;
+            color: #8888aa;
+            flex-wrap: wrap;
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .article-meta a {
+            color: #00d4ff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .article-meta a:hover {
+            color: #7b2ff7;
+            text-decoration: underline;
+        }
+
+        .article-summary {
+            font-size: 15px;
+            color: #ccccdd;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .article-detail {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #aaaacc;
+            line-height: 1.8;
+            display: none;
+        }
+
+        .article-card.expanded .article-detail {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .expand-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #00d4ff;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .expand-btn:hover {
+            color: #7b2ff7;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(0, 212, 255, 0.15);
+            color: #00d4ff;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-right: 8px;
+        }
+
+        /* 数据看板 */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .data-card {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 47, 247, 0.1));
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .data-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .data-value {
+            font-size: 42px;
+            font-weight: bold;
+            color: #00d4ff;
+            margin-bottom: 8px;
+        }
+
+        .data-label {
+            font-size: 14px;
+            color: #8888aa;
+            margin-bottom: 8px;
+        }
+
+        .data-trend {
+            font-size: 13px;
+            color: #2ed573;
+        }
+
+        .data-trend.down {
+            color: #ff4757;
+        }
+
+        /* 冷幽默卡片 */
+        .humor-card {
+            background: linear-gradient(135deg, rgba(155, 89, 182, 0.15), rgba(0, 212, 255, 0.1));
+            border: 1px solid rgba(155, 89, 182, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .humor-card::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-size: 80px;
+            color: rgba(155, 89, 182, 0.2);
+            font-family: Georgia, serif;
+        }
+
+        .humor-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #d0d0ff;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+
+        .humor-emoji {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        /* 底部 */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666688;
+            font-size: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 40px;
+        }
+
+        .footer a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+
+        /* 滚动进度 */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00d4ff, #7b2ff7);
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        /* 响应式 - 手机端优化 */
+        @media (max-width: 768px) {
+            /* 报头区域 */
+            .brand { font-size: 32px; }
+            .subtitle { font-size: 14px; }
+            .masthead { padding: 25px 15px; margin-bottom: 30px; }
+            .meta-info { gap: 10px; }
+            .meta-item { font-size: 12px; padding: 5px 10px; }
+            .date-display { padding: 6px 12px; }
+            .date-display-text { font-size: 13px; }
+            .date-picker-icon { font-size: 14px; }
+            
+            /* 日历模态框 */
+            .calendar-modal-content { 
+                padding: 20px; 
+                width: 95%;
+                max-width: 350px;
+            }
+            .calendar-modal-title { font-size: 16px; }
+            .calendar-grid { gap: 3px; }
+            .calendar-day { font-size: 13px; }
+            .calendar-weekday { font-size: 11px; }
+            
+            /* 容器和板块 */
+            .container { padding: 20px 12px; }
+            .section { padding: 20px 15px; margin-bottom: 20px; }
+            .section-header { margin-bottom: 20px; padding-bottom: 12px; }
+            .section-icon { font-size: 24px; }
+            .section-title { font-size: 20px; }
+            .section-desc { font-size: 13px; }
+            
+            /* 导航标签 */
+            .nav-tabs { gap: 8px; margin-bottom: 25px; }
+            .nav-tab { padding: 8px 16px; font-size: 13px; }
+            
+            /* 文章卡片 */
+            .article-card { padding: 18px 15px; margin-bottom: 18px; }
+            .article-title { 
+                font-size: 16px; 
+                min-width: 100%;
+                order: -1;
+                margin-bottom: 8px;
+                line-height: 1.4;
+            }
+            .article-header {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .article-meta {
+                width: 100%;
+                font-size: 12px;
+                gap: 10px;
+            }
+            .article-summary { font-size: 14px; line-height: 1.6; }
+            .article-detail { 
+                font-size: 13px; 
+                padding: 12px;
+                line-height: 1.6;
+            }
+            .expand-btn { font-size: 13px; }
+            .tag { font-size: 11px; padding: 3px 8px; }
+            
+            /* 数据卡片 */
+            .data-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 12px;
+            }
+            .data-card { padding: 18px 12px; }
+            .data-value { font-size: 28px; }
+            .data-label { font-size: 12px; }
+            .data-trend { font-size: 11px; }
+            
+            /* 冷幽默卡片 */
+            .humor-card { padding: 18px 15px; margin-bottom: 15px; }
+            .humor-text { font-size: 14px; line-height: 1.6; }
+            .humor-emoji { font-size: 18px; }
+            
+            /* 底部 */
+            .footer { padding: 25px 15px; font-size: 12px; }
+        }
+        
+        /* 超小屏幕（<375px） */
+        @media (max-width: 375px) {
+            .brand { font-size: 28px; }
+            .section-title { font-size: 18px; }
+            .article-title { font-size: 15px; }
+            .data-grid { grid-template-columns: 1fr; }
+            .nav-tabs { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+    <div class="particles" id="particles"></div>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="container">
+        <!-- 报头 -->
+        <header class="masthead">
+            <h1 class="brand">📰 科技芯声</h1>
+            <p class="subtitle">Tech Core Voice</p>
+            <div class="meta-info">
+                <div class="meta-item">
+                    <span class="date-display" onclick="openCalendar()" title="点击选择其他日期">
+                        <span class="date-display-text" id="current-date">2026-03-03 星期二</span>
+                        <span class="date-picker-icon">📅</span>
+                    </span>
+                </div>
+            </div>
+        </header>
+        
+        <!-- 日历模态框 -->
+        <div class="calendar-modal" id="calendar-modal">
+            <div class="calendar-modal-content">
+                <div class="calendar-modal-header">
+                    <div class="calendar-modal-title" id="calendar-month">2026 年 3 月</div>
+                    <button class="calendar-modal-close" onclick="closeCalendar()">×</button>
+                </div>
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <div class="calendar-nav">
+                            <button id="prev-month" title="上个月">◀</button>
+                            <button id="today-btn" title="回到今天">今天</button>
+                            <button id="next-month" title="下个月">▶</button>
+                        </div>
+                    </div>
+                    <div class="calendar-grid" id="calendar-grid">
+                        <!-- 日历由 JavaScript 动态生成 -->
+                    </div>
+                </div>
+                <div class="calendar-legend">
+                    <div class="legend-item">
+                        <div class="legend-dot has-content"></div>
+                        <span>有资讯</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot today"></div>
+                        <span>今天</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 导航 -->
+        <nav class="nav-tabs">
+            <div class="nav-tab active" data-section="all">📰 全部</div>
+            <div class="nav-tab" data-section="news">🔥 科技新闻</div>
+            <div class="nav-tab" data-section="solution">💡 概念解决</div>
+            <div class="nav-tab" data-section="industry">🏭 行业深挖</div>
+            <div class="nav-tab" data-section="risk">⚠️ 投资风险</div>
+            <div class="nav-tab" data-section="data">📊 科技数据</div>
+            <div class="nav-tab" data-section="humor">❄️ 冷幽默</div>
+        </nav>
+
+        <!-- 科技新闻 -->
+        <section class="section visible" id="news-section">
+            <div class="section-header">
+                <span class="section-icon">🔥</span>
+                <div>
+                    <h2 class="section-title news">科技新闻</h2>
+                    <p class="section-desc">全球科技圈最新动态，热点事件一手掌握</p>
+                </div>
+            </div>
+
+            <div class="article-card news">
+                <div class="article-header">
+                    <h3 class="article-title">Anthropic 完成 300 亿美元 G 轮融资，估值达 3800 亿美元</h3>
+                    <div class="article-meta">
+                        <span>🎯 95%</span>
+                        <span>📰 TechCrunch</span>
+                    </div>
+                </div>
+                <div class="article-summary">
+                    <span class="tag">融资</span><span class="tag">AI</span>
+                    AI 实验室 Anthropic 完成 G 轮融资，30+ 投资者参与，包括 NVIDIA、Founders Fund 等顶级机构，估值创新高。
+                </div>
+                <div class="article-detail">
+                    <strong>深度解读：</strong>此次融资是 AI 领域史上最大规模融资之一，显示资本市场对前沿 AI 研究的持续狂热。资金将主要用于扩大计算基础设施、加速 AGI 研发。值得注意的是，NVIDIA 的参与意味着算力供应链的深度绑定，可能影响未来 AI 模型的硬件依赖格局。
+                </div>
+                <div class="expand-btn">📖 展开深度解读</div>
+            </div>
+
+            <div class="article-card news">
+                <div class="article-header">
+                    <h3 class="article-title">欧盟考虑放宽 AI 法案部分条款</h3>
+                    <div class="article-meta">
+                        <span>🎯 85%</span>
+                        <span>📰 欧盟数字战略司</span>
+                    </div>
+                </div>
+                <div class="article-summary">
+                    <span class="tag">政策</span><span class="tag">监管</span>
+                    拟议的"数字综合法规"可能推迟高风险 AI 系统义务、简化网络安全报告、放松个人数据用于 AI 训练的限制。
+                </div>
+                <div class="article-detail">
+                    <strong>深度解读：</strong>欧盟在 AI 监管与竞争力之间寻找新平衡。此前严格的 AI 法案被批评可能阻碍欧洲 AI 创新，此次调整反映政策转向务实。但放宽数据限制也引发隐私保护担忧，议会审议结果将决定最终走向。
+                </div>
+                <div class="expand-btn">📖 展开深度解读</div>
+            </div>
+
+            <div class="article-card news">
+                <div class="article-header">
+                    <h3 class="article-title">GLM-4.7 在代理编码基准测试中超越 Claude Sonnet 4.5 和 GPT-5.1</h3>
+                    <div class="article-meta">
+                        <span>🎯 80%</span>
+                        <span>📰 BentoML 评测</span>
+                    </div>
+                </div>
+                <div class="article-summary">
+                    <span class="tag">开源</span><span class="tag">模型</span>
+                    开源模型性能逼近闭源头部，可能改变企业采用策略和 API 定价格局。
+                </div>
+                <div class="article-detail">
+                    <strong>深度解读：</strong>GLM-4.7 的突破证明开源模型正在快速追赶。对于企业用户，这意味着更多选择和更低成本。但闭源模型在安全性、稳定性上仍有优势，未来可能是"开源 + 闭源"混合采用的格局。
+                </div>
+                <div class="expand-btn">📖 展开深度解读</div>
+            </div>
+        </section>
+
+        <!-- 概念解决 -->
+        <section class="section" id="solution-section">
+            <div class="section-header">
+                <span class="section-icon">💡</span>
+                <div>
+                    <h2 class="section-title solution">概念解决</h2>
+                    <p class="section-desc">新技术如何解决实际问题，落地应用案例解析</p>
+                </div>
+            </div>
+
+            <div class="article-card solution">
+                <div class="article-header">
+                    <h3 class="article-title">MIT 开发 AI 算法追踪脑干神经通路</h3>
+                    <div class="article-meta">
+                        <span>🎯 90%</span>
+                        <span>📰 MIT News</span>
+                    </div>
+                </div>
+                <div class="article-summary">
+                    <span class="tag">医疗</span><span class="tag">脑科学</span>
+                    新工具可在活体扩散 MRI 扫描中精确解析神经束，为神经科学和脑机接口提供新窗口。
+                </div>
+                <div class="article-detail">
+                    <strong>应用场景：</strong>该算法可帮助医生术前规划神经外科手术，降低手术风险。长期来看，对渐冻症、帕金森等神经退行性疾病的研究有重要价值。脑机接口公司也可能借此提升信号采集精度。
+                </div>
+                <div class="expand-btn">📖 展开应用场景</div>
+            </div>
+
+            <div class="article-card solution">
+                <div class="article-header">
+                    <h3 class="article-title">O-RAN 框架实现 AI/ML 实时定位</h3>
+                    <div class="article-meta">
+                        <span>🎯 70%</span>
+                        <span>📰 arXiv:2511.19233</span>
+                    </div>
+                </div>
+                <div class="article-summary">
+                    <span class="tag">通信</span><span class="tag">6G</span>
+                    开放无线接入网与 AI 结合，可能推动 6G 网络智能化。
+                </div>
+                <div class="article-detail">
+                    <strong>应用场景：</strong>智能网络优化、动态频谱分配、故障预测。对于运营商，这意味着更低的运维成本和更高的网络效率。对于用户，可能带来更稳定的 5G/6G 连接体验。
+                </div>
+                <div class="expand-btn">📖 展开应用场景</div>
+            </div>
+        </section>
+
+        <!-- 行业深挖 -->
+        <section class="section" id="industry-section">
+            <div class="section-header">
+                <span class="section-icon">🏭</span>
+                <div>
+                    <h2 class="section-title industry">行业深挖</h2>
+                    <p class="section-desc">产业链深度分析，投资风向与竞争格局</p>
+                </div>
+            </div>
+
+            <div class="article-card industry">
+                <div class="article-header">
+                    <h3 class="article-title">17 家美国 AI 初创公司在 2026 年前两月融资超 1 亿美元</h3>
+                    <div class="article-meta">
+                        <span>🎯 90%</span>
+                        <span>📰 TechCrunch 统计</span>
+                    </div>
+                </div>
+                <div class="article-summary">
+                    <span class="tag">融资</span><span class="tag">创业</span>
+                    包括 Simile($1 亿)、Runway($3.15 亿，估值$53 亿)、Goodfire($1.5 亿) 等，资本向头部集中。
+                </div>
+                <div class="article-detail">
+                    <strong>投资逻辑：</strong>投资者偏好从"通用 AI"转向"垂直应用"。Runway 的成功证明媒体生成赛道有商业化潜力，Goodfire 的可解释性 AI 则切中企业用户痛点。早期项目融资难度增加，资金向有明确收入模式的团队集中。
+                </div>
+                <div class="expand-btn">📖 展开投资逻辑</div>
+            </div>
+
+            <div class="article-card industry">
+                <div class="article-header">
+                    <h3 class="article-title">AI 代理框架 GitHub 热度飙升</h3>
+                    <div class="article-meta">
+                        <span>🎯 75%</span>
+                        <span>📰 GitHub Trending</span>
+                    </div>
+                </div>
+                <div class="article-summary">
+                    <span class="tag">开发者</span><span class="tag">基础设施</span>
+                    "500-AI-Agents-Projects"等仓库获数千星，开发者对 AI 代理基础设施兴趣浓厚。
+                </div>
+                <div class="article-detail">
+                    <strong>趋势分析：</strong>AI 代理从"概念验证"进入"工程化"阶段。开发者需要可复用的框架、调试工具、部署方案。这可能是下一个"卖铲子"的机会，类似当年的 Kubernetes、Docker。
+                </div>
+                <div class="expand-btn">📖 展开趋势分析</div>
+            </div>
+
+            <div class="article-card industry">
+                <div class="article-header">
+                    <h3 class="article-title">Fundamental 完成 2.55 亿美元 A 轮，估值 14 亿美元</h3>
+                    <div class="article-meta">
+                        <span>🎯 85%</span>
+                        <span>📰 TechCrunch</span>
+                    </div>
+                </div>
+                <div class="article-summary">
+                    <span class="tag">独角兽</span><span class="tag">大数据</span>
+                    大数据分析 AI 公司快速跻身独角兽，Salesforce Ventures 等战略投资者入场。
+                </div>
+                <div class="article-detail">
+                    <strong>赛道分析：</strong>企业数据分析市场正在被 AI 重塑。传统 BI 工具需要人工配置，AI 驱动的自动分析降低使用门槛。Salesforce 的战略投资暗示 CRM+AI 分析可能成为标配。
+                </div>
+                <div class="expand-btn">📖 展开赛道分析</div>
+            </div>
+        </section>
+
+        <!-- 投资风险 -->
+        <section class="section" id="risk-section">
+            <div class="section-header">
+                <span class="section-icon">⚠️</span>
+                <div>
+                    <h2 class="section-title risk">投资风险</h2>
+                    <p class="section-desc">潜在风险与警示，理性看待 AI 热潮</p>
+                </div>
+            </div>
+
+            <div class="article-card risk">
+                <div class="article-header">
+                    <h3 class="article-title">高盛警告：AI 岗位替代效应显现，多个行业将被颠覆</h3>
+                    <div class="article-meta">
+                        <span>🎯 85%</span>
+                        <span>📰 Reuters</span>
+                    </div>
+                </div>
+                <div class="article-summary">
+                    <span class="tag">就业</span><span class="tag">经济</span>
+                    投资者和经济学家对 AI 颠覆传统行业的担忧加剧，企业开始调整人力结构。
+                </div>
+                <div class="article-detail">
+                    <strong>风险提示：</strong>客服、数据录入、基础编程等重复性岗位首当其冲。但历史经验表明，技术革命会创造新岗位，关键是劳动力能否快速转型。投资者需关注受影响行业的估值调整。
+                </div>
+                <div class="expand-btn">📖 展开风险提示</div>
+            </div>
+
+            <div class="article-card risk">
+                <div class="article-header">
+                    <h3 class="article-title">全球算力供应处于脆弱平衡态，单点故障可能引发服务雪崩</h3>
+                    <div class="article-meta">
+                        <span>🎯 90%</span>
+                        <span>📰 行业观察</span>
+                    </div>
+                </div>
+                <div class="article-summary">
+                    <span class="tag">基础设施</span><span class="tag">风险</span>
+                    由于负载均衡算法，任何一个计算节点的掉线，都可能引发全球 AI 服务连锁反应。
+                </div>
+                <div class="article-detail">
+                    <strong>风险分析：</strong>Claude 断线后流量涌向 Gemini，导致 503 拒绝服务。这暴露了 AI 基础设施的脆弱性。投资者需关注数据中心冗余、电力供应稳定性、地缘政治风险。中东数据中心断电事件敲响警钟。
+                </div>
+                <div class="expand-btn">📖 展开风险分析</div>
+            </div>
+        </section>
+
+        <!-- 科技数据 -->
+        <section class="section" id="data-section">
+            <div class="section-header">
+                <span class="section-icon">📊</span>
+                <div>
+                    <h2 class="section-title data">科技数据</h2>
+                    <p class="section-desc">关键指标一目了然，用数据看懂趋势</p>
+                </div>
+            </div>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-value">17</div>
+                    <div class="data-label">AI 大额融资 (>1 亿美元)</div>
+                    <div class="data-trend">↑ 前两月已达 2025 年单月均值</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-value">$3800 亿</div>
+                    <div class="data-label">Anthropic 最新估值</div>
+                    <div class="data-trend">↑ +$800 亿 (2025 年末)</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-value">287</div>
+                    <div class="data-label">GitHub AI 代理日增星</div>
+                    <div class="data-trend">↑ 热度上升</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-value">~150</div>
+                    <div class="data-label">arXiv AI 论文 (2 月)</div>
+                    <div class="data-trend">→ 稳定增长</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-value">$760 亿</div>
+                    <div class="data-label">2025 年 AI 融资总额</div>
+                    <div class="data-trend">↑ 创历史新高</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 冷幽默 -->
+        <section class="section" id="humor-section">
+            <div class="section-header">
+                <span class="section-icon">❄️</span>
+                <div>
+                    <h2 class="section-title humor">冷幽默</h2>
+                    <p class="section-desc">科技圈的幽默与讽刺，轻松一下</p>
+                </div>
+            </div>
+
+            <div class="humor-card">
+                <p class="humor-text">
+                    <span class="humor-emoji">💰</span>
+                    "2025 年 AI 融资$760 亿，2026 年前两月已经停不下来。照这个速度，年底 AI 公司估值总和可能超过全球 GDP——或者至少超过某些国家的。"
+                </p>
+            </div>
+
+            <div class="humor-card">
+                <p class="humor-text">
+                    <span class="humor-emoji">🇪🇺</span>
+                    "欧盟一边说要监管 AI，一边考虑放宽数据限制。这就像给老虎装个减速带，然后说'为了竞争力，我们拆了吧'。"
+                </p>
+            </div>
+
+            <div class="humor-card">
+                <p class="humor-text">
+                    <span class="humor-emoji">🤖</span>
+                    "开源模型 GLM-4.7 性能追平闭源头部。好消息：选择多了。坏消息：选型更困难了。"
+                </p>
+            </div>
+        </section>
+
+        <!-- 底部 -->
+        <footer class="footer">
+            <p>📱 数据源：SearXNG 聚合搜索 + TechCrunch + arXiv + GitHub Trending + MIT News</p>
+            <p>🔒 置信度说明：90%+=官方/主流媒体确认 | 75-89%=多源交叉验证 | <75%=单一来源/待验证</p>
+            <p style="margin-top: 20px;">Generated by 元芳&虾皮 AI | <a href="#">查看历史期刊</a> | <a href="#">订阅每日推送</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // 可用的日期列表（由生成脚本填充）
+        const AVAILABLE_DATES = ["20260304"];
+        
+        // 当前选中的年月
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth();
+        
+        // 创建背景粒子
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+        
+        // 生成日历
+        function generateCalendar(year, month) {
+            const grid = document.getElementById('calendar-grid');
+            const monthTitle = document.getElementById('calendar-month');
+            const today = new Date();
+            
+            // 更新月份标题
+            monthTitle.textContent = `${year}年${month + 1}月`;
+            
+            // 清空网格
+            grid.innerHTML = '';
+            
+            // 添加星期标题
+            const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+            weekdays.forEach(day => {
+                const div = document.createElement('div');
+                div.className = 'calendar-weekday';
+                div.textContent = day;
+                grid.appendChild(div);
+            });
+            
+            // 获取当月第一天和最后一天
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startDay = firstDay.getDay(); // 0-6 (周日 - 周六)
+            const totalDays = lastDay.getDate();
+            
+            // 添加空白单元格（第一天之前的）
+            for (let i = 0; i < startDay; i++) {
+                const div = document.createElement('div');
+                div.className = 'calendar-day empty';
+                grid.appendChild(div);
+            }
+            
+            // 添加日期
+            for (let day = 1; day <= totalDays; day++) {
+                const div = document.createElement('div');
+                div.className = 'calendar-day';
+                div.textContent = day;
+                
+                // 格式化日期为 YYYYMMDD
+                const dateStr = `${year}${String(month + 1).padStart(2, '0')}${String(day).padStart(2, '0')}`;
+                
+                // 检查是否是今天
+                if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+                    div.classList.add('today');
+                }
+                
+                // 检查是否有内容
+                if (AVAILABLE_DATES.includes(dateStr)) {
+                    div.classList.add('has-content');
+                    div.title = `查看 ${year}-${month + 1}-${day} 的资讯`;
+                    div.onclick = () => {
+                        window.location.href = `digest-${dateStr}.html`;
+                    };
+                } else {
+                    div.classList.add('disabled');
+                    div.title = '暂无资讯';
+                }
+                
+                grid.appendChild(div);
+            }
+        }
+        
+        // 初始化日历
+        function initCalendar() {
+            // 从 README.md 加载可用日期（简化版：直接检查文件是否存在）
+            // 实际使用时，可以在生成网页时动态注入 AVAILABLE_DATES
+            
+            const prevBtn = document.getElementById('prev-month');
+            const nextBtn = document.getElementById('next-month');
+            const todayBtn = document.getElementById('today-btn');
+            
+            prevBtn.onclick = () => {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                generateCalendar(currentYear, currentMonth);
+            };
+            
+            nextBtn.onclick = () => {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                generateCalendar(currentYear, currentMonth);
+            };
+            
+            todayBtn.onclick = () => {
+                const today = new Date();
+                currentYear = today.getFullYear();
+                currentMonth = today.getMonth();
+                generateCalendar(currentYear, currentMonth);
+            };
+            
+            // 生成初始日历
+            generateCalendar(currentYear, currentMonth);
+        }
+
+        // 滚动进度条
+        function updateProgressBar() {
+            const progressBar = document.getElementById('progressBar');
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            progressBar.style.width = scrollPercent + '%';
+        }
+
+        // 滚动动画
+        function handleScrollAnimation() {
+            const sections = document.querySelectorAll('.section');
+            
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                const triggerPoint = window.innerHeight * 0.8;
+                
+                if (rect.top < triggerPoint) {
+                    section.classList.add('visible');
+                }
+            });
+        }
+
+        // 文章卡片展开
+        function initExpandCards() {
+            document.querySelectorAll('.expand-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const card = this.closest('.article-card');
+                    card.classList.toggle('expanded');
+                    this.textContent = card.classList.contains('expanded') ? '📕 收起' : '📖 展开深度解读';
+                });
+            });
+
+            document.querySelectorAll('.article-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('expanded');
+                    const btn = this.querySelector('.expand-btn');
+                    if (btn) {
+                        btn.textContent = this.classList.contains('expanded') ? '📕 收起' : '📖 展开深度解读';
+                    }
+                });
+            });
+        }
+
+        // 导航标签切换
+        function initNavTabs() {
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const section = this.dataset.section;
+                    document.querySelectorAll('.section').forEach(sec => {
+                        if (section === 'all' || sec.id === section + '-section') {
+                            sec.style.display = 'block';
+                            setTimeout(() => sec.classList.add('visible'), 100);
+                        } else {
+                            sec.style.display = 'none';
+                            sec.classList.remove('visible');
+                        }
+                    });
+                });
+            });
+        }
+
+        // 日历模态框控制
+        function openCalendar() {
+            document.getElementById('calendar-modal').classList.add('show');
+            document.body.style.overflow = 'hidden'; // 防止背景滚动
+        }
+        
+        function closeCalendar() {
+            document.getElementById('calendar-modal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+        
+        // 点击模态框背景关闭
+        document.getElementById('calendar-modal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCalendar();
+            }
+        });
+        
+        // ESC 键关闭
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeCalendar();
+            }
+        });
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            initCalendar();
+            initExpandCards();
+            initNavTabs();
+            handleScrollAnimation();
+        });
+
+        // 滚动事件
+        window.addEventListener('scroll', () => {
+            updateProgressBar();
+            handleScrollAnimation();
+        });
+    </script>
+</body>
+</html>
