@@ -123,25 +123,37 @@
             border: 1px solid rgba(0, 212, 255, 0.3);
         }
 
-        /* 日期选择按钮 */
-        .date-picker-btn {
+        /* 日期选择器（整合到日期显示） */
+        .date-display {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(0, 212, 255, 0.15);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
             padding: 8px 16px;
             border-radius: 20px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
             cursor: pointer;
-            font-size: 14px;
             transition: all 0.3s ease;
-            margin-top: 15px;
         }
 
-        .date-picker-btn:hover {
-            background: rgba(0, 212, 255, 0.25);
+        .date-display:hover {
+            background: rgba(0, 212, 255, 0.2);
             transform: translateY(-2px);
+        }
+
+        .date-display-text {
+            color: #00d4ff;
+            font-size: 14px;
+        }
+
+        .date-picker-icon {
+            font-size: 16px;
+            opacity: 0.8;
+            transition: transform 0.3s ease;
+        }
+
+        .date-display:hover .date-picker-icon {
+            transform: scale(1.1);
         }
 
         /* 日历模态框 */
@@ -639,7 +651,9 @@
             .masthead { padding: 25px 15px; margin-bottom: 30px; }
             .meta-info { gap: 10px; }
             .meta-item { font-size: 12px; padding: 5px 10px; }
-            .date-picker-btn { font-size: 13px; padding: 6px 14px; }
+            .date-display { padding: 6px 12px; }
+            .date-display-text { font-size: 13px; }
+            .date-picker-icon { font-size: 14px; }
             
             /* 日历模态框 */
             .calendar-modal-content { 
@@ -731,13 +745,13 @@
             <h1 class="brand">📰 科技芯声</h1>
             <p class="subtitle">Tech Core Voice</p>
             <div class="meta-info">
-                <div class="meta-item">📅 <span id="current-date">2026-03-04 星期二</span></div>
+                <div class="meta-item">
+                    <span class="date-display" onclick="openCalendar()" title="点击选择其他日期">
+                        <span class="date-display-text" id="current-date">2026-03-04 星期二</span>
+                        <span class="date-picker-icon">📅</span>
+                    </span>
+                </div>
             </div>
-            
-            <!-- 日期选择按钮 -->
-            <button class="date-picker-btn" onclick="openCalendar()">
-                📅 选择日期
-            </button>
         </header>
         
         <!-- 日历模态框 -->
