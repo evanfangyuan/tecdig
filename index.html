@@ -123,13 +123,85 @@
             border: 1px solid rgba(0, 212, 255, 0.3);
         }
 
-        /* 日历组件 */
+        /* 日期选择按钮 */
+        .date-picker-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 212, 255, 0.15);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            color: #00d4ff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .date-picker-btn:hover {
+            background: rgba(0, 212, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* 日历模态框 */
+        .calendar-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .calendar-modal.show {
+            display: flex;
+        }
+
+        .calendar-modal-content {
+            background: linear-gradient(135deg, #1a1a3e 0%, #0f0f2d 100%);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 16px;
+            padding: 25px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.2);
+        }
+
+        .calendar-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-modal-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .calendar-modal-close {
+            background: transparent;
+            border: none;
+            color: #8888aa;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0 5px;
+            transition: color 0.3s ease;
+        }
+
+        .calendar-modal-close:hover {
+            color: #fff;
+        }
+
         .calendar-container {
-            margin-top: 25px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            border: 1px solid rgba(0, 212, 255, 0.2);
+            margin-bottom: 15px;
         }
 
         .calendar-header {
@@ -223,6 +295,36 @@
         .calendar-day.empty {
             background: transparent;
             cursor: default;
+        }
+
+        .calendar-legend {
+            text-align: center;
+            font-size: 12px;
+            color: #8888aa;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .legend-dot.has-content {
+            background: rgba(46, 213, 115, 0.4);
+        }
+
+        .legend-dot.today {
+            border: 2px solid #00d4ff;
+            background: rgba(0, 212, 255, 0.2);
         }
 
         /* 导航栏 */
@@ -537,6 +639,18 @@
             .masthead { padding: 25px 15px; margin-bottom: 30px; }
             .meta-info { gap: 10px; }
             .meta-item { font-size: 12px; padding: 5px 10px; }
+            .date-picker-btn { font-size: 13px; padding: 6px 14px; }
+            
+            /* 日历模态框 */
+            .calendar-modal-content { 
+                padding: 20px; 
+                width: 95%;
+                max-width: 350px;
+            }
+            .calendar-modal-title { font-size: 16px; }
+            .calendar-grid { gap: 3px; }
+            .calendar-day { font-size: 13px; }
+            .calendar-weekday { font-size: 11px; }
             
             /* 容器和板块 */
             .container { padding: 20px 12px; }
@@ -620,25 +734,43 @@
                 <div class="meta-item">📅 <span id="current-date">2026-03-04 星期二</span></div>
             </div>
             
-            <!-- 日历组件 -->
-            <div class="calendar-container">
-                <div class="calendar-header">
-                    <div class="calendar-title" id="calendar-month">2026 年 3 月</div>
-                    <div class="calendar-nav">
-                        <button id="prev-month" title="上个月">◀</button>
-                        <button id="today-btn" title="回到今天">今天</button>
-                        <button id="next-month" title="下个月">▶</button>
+            <!-- 日期选择按钮 -->
+            <button class="date-picker-btn" onclick="openCalendar()">
+                📅 选择日期
+            </button>
+        </header>
+        
+        <!-- 日历模态框 -->
+        <div class="calendar-modal" id="calendar-modal">
+            <div class="calendar-modal-content">
+                <div class="calendar-modal-header">
+                    <div class="calendar-modal-title" id="calendar-month">2026 年 3 月</div>
+                    <button class="calendar-modal-close" onclick="closeCalendar()">×</button>
+                </div>
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <div class="calendar-nav">
+                            <button id="prev-month" title="上个月">◀</button>
+                            <button id="today-btn" title="回到今天">今天</button>
+                            <button id="next-month" title="下个月">▶</button>
+                        </div>
+                    </div>
+                    <div class="calendar-grid" id="calendar-grid">
+                        <!-- 日历由 JavaScript 动态生成 -->
                     </div>
                 </div>
-                <div class="calendar-grid" id="calendar-grid">
-                    <!-- 日历由 JavaScript 动态生成 -->
-                </div>
-                <div style="text-align: center; margin-top: 12px; font-size: 12px; color: #8888aa;">
-                    <span style="display: inline-block; width: 12px; height: 12px; background: rgba(46, 213, 115, 0.2); border-radius: 3px; margin-right: 5px;"></span>有资讯
-                    <span style="display: inline-block; width: 12px; height: 12px; background: rgba(0, 212, 255, 0.2); border: 2px solid #00d4ff; border-radius: 3px; margin-left: 15px; margin-right: 5px;"></span>今天
+                <div class="calendar-legend">
+                    <div class="legend-item">
+                        <div class="legend-dot has-content"></div>
+                        <span>有资讯</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot today"></div>
+                        <span>今天</span>
+                    </div>
                 </div>
             </div>
-        </header>
+        </div>
 
         <!-- 导航 -->
         <nav class="nav-tabs">
@@ -1145,6 +1277,31 @@
             });
         }
 
+        // 日历模态框控制
+        function openCalendar() {
+            document.getElementById('calendar-modal').classList.add('show');
+            document.body.style.overflow = 'hidden'; // 防止背景滚动
+        }
+        
+        function closeCalendar() {
+            document.getElementById('calendar-modal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+        
+        // 点击模态框背景关闭
+        document.getElementById('calendar-modal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCalendar();
+            }
+        });
+        
+        // ESC 键关闭
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeCalendar();
+            }
+        });
+        
         // 初始化
         document.addEventListener('DOMContentLoaded', () => {
             createParticles();
