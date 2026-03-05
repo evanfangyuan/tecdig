@@ -799,7 +799,7 @@
             <div class="calendar-modal-content">
                 <div class="calendar-modal-header">
                     <div class="calendar-modal-title" id="calendar-month">2026 年 3 月</div>
-                    <button class="calendar-modal-close" onclick="closeCalendar()">×</button>
+                    <button class="calendar-modal-close" data-action="close-calendar">×</button>
                 </div>
                 <div class="calendar-container">
                     <div class="calendar-header">
@@ -1407,6 +1407,10 @@
         
         // 初始化
         document.addEventListener('DOMContentLoaded', () => {
+            // 关闭按钮事件
+            document.querySelectorAll('[data-action="close-calendar"]').forEach(el => {
+                el.addEventListener('click', closeCalendar);
+            });
             // 日历点击事件
             document.querySelectorAll('[data-action="open-calendar"]').forEach(el => {
                 el.addEventListener('click', openCalendar);
