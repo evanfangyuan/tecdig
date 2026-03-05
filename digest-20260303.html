@@ -1142,7 +1142,20 @@
 
     <script>
         // 可用的日期列表（由生成脚本填充）
-        const AVAILABLE_DATES = ["20260304","20260303"];
+        const AVAILABLE_DATES = [];
+        let datesLoaded = false;
+        let datesLoaded = false;
+        
+        async function loadAvailableDates() {
+            try {
+                const response = await fetch("available-dates.json");
+                const data = await response.json();
+                AVAILABLE_DATES = data.dates || [];
+                datesLoaded = true;
+            } catch (error) {
+                console.error("加载日期失败:", error);
+            }
+        }
         
         // 当前页面日期（从 URL 或页面内容提取）
         let currentPageDate = null;
@@ -1257,7 +1270,8 @@
         }
         
         // 初始化日历
-        function initCalendar() {
+        async function initCalendar() {
+            await loadAvailableDates(); {
             // 提取当前页面日期
             currentPageDate = extractCurrentPageDate();
             
