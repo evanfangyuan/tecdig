@@ -1141,19 +1141,21 @@
     </div>
 
     <script>
-        // 可用的日期列表（由生成脚本填充）
-        const AVAILABLE_DATES = [];
-        let datesLoaded = false;
+        // 可用的日期列表（动态加载）
+        let AVAILABLE_DATES = [];
         let datesLoaded = false;
         
+        // 从 JSON 文件加载可用日期
         async function loadAvailableDates() {
             try {
-                const response = await fetch("available-dates.json");
+                const response = await fetch('available-dates.json');
                 const data = await response.json();
                 AVAILABLE_DATES = data.dates || [];
                 datesLoaded = true;
+                console.log('已加载日期列表:', AVAILABLE_DATES.length, '个日期');
             } catch (error) {
-                console.error("加载日期失败:", error);
+                console.error('加载日期列表失败:', error);
+                AVAILABLE_DATES = [];
             }
         }
         
@@ -1271,7 +1273,9 @@
         
         // 初始化日历
         async function initCalendar() {
-            await loadAvailableDates(); {
+            // 先加载日期列表
+            await loadAvailableDates();
+            
             // 提取当前页面日期
             currentPageDate = extractCurrentPageDate();
             
