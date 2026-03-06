@@ -772,6 +772,104 @@
             .data-grid { grid-template-columns: 1fr; }
             .nav-tabs { flex-wrap: wrap; }
         }
+        
+        /* 微信二维码浮窗 */
+        .wechat-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .wechat-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            max-width: 220px;
+            text-align: center;
+        }
+        
+        .wechat-card.collapsed {
+            padding: 10px;
+            max-width: 60px;
+        }
+        
+        .wechat-card.collapsed .qr-text,
+        .wechat-card.collapsed .qr-image {
+            display: none;
+        }
+        
+        .wechat-toggle {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #00d4ff, #7b2ff7);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 212, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .wechat-toggle:hover {
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.6);
+        }
+        
+        .qr-image {
+            width: 180px;
+            height: 180px;
+            margin: 10px auto;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        .qr-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .qr-text {
+            color: #333;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-top: 12px;
+            font-weight: 500;
+        }
+        
+        .wechat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .wechat-float {
+                bottom: 15px;
+                right: 15px;
+            }
+            .wechat-card {
+                max-width: 180px;
+                padding: 15px;
+            }
+            .qr-image {
+                width: 140px;
+                height: 140px;
+            }
+            .qr-text {
+                font-size: 11px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1423,6 +1521,27 @@
             updateProgressBar();
             handleScrollAnimation();
         });
+        
+        // 微信二维码切换
+        function toggleWechatCard() {
+            const card = document.getElementById('wechatCard');
+            card.classList.toggle('collapsed');
+            const btn = document.querySelector('.wechat-toggle');
+            btn.textContent = card.classList.contains('collapsed') ? '📱' : '✕ 收起';
+        }
     </script>
+    
+    <!-- 微信二维码浮窗 -->
+    <div class="wechat-float">
+        <div class="wechat-card" id="wechatCard">
+            <button class="wechat-toggle" onclick="toggleWechatCard()">✕ 收起</button>
+            <div class="qr-image">
+                <img src="wechat-qr.jpg" alt="微信公众号二维码">
+            </div>
+            <div class="qr-text">
+                如需定制其他资讯或探讨 AI 应用，请关注公众号
+            </div>
+        </div>
+    </div>
 </body>
 </html>
