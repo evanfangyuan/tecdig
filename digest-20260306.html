@@ -707,25 +707,26 @@
             .calendar-day.today::after { font-size: 9px; }
             
             /* 容器和板块 */
-            .container { padding: 20px 12px; }
-            .section { padding: 20px 15px; margin-bottom: 20px; }
-            .section-header { margin-bottom: 20px; padding-bottom: 12px; }
+            .container { padding: 20px 10px; }
+            .section { padding: 15px 10px; margin-bottom: 15px; }
+            .section-header { margin-bottom: 15px; padding-bottom: 10px; }
             .section-icon { font-size: 24px; }
-            .section-title { font-size: 20px; }
-            .section-desc { font-size: 13px; }
+            .section-title { font-size: 18px; }
+            .section-desc { font-size: 12px; }
             
             /* 导航标签 */
             .nav-tabs { gap: 8px; margin-bottom: 25px; }
             .nav-tab { padding: 8px 16px; font-size: 13px; }
             
             /* 文章卡片 */
-            .article-card { padding: 18px 15px; margin-bottom: 18px; }
+            .article-card { padding: 15px 12px; margin-bottom: 15px; }
             .article-title { 
-                font-size: 16px; 
+                font-size: 15px; 
                 min-width: 100%;
                 order: -1;
                 margin-bottom: 8px;
-                line-height: 1.4;
+                line-height: 1.5;
+                word-break: break-word;
             }
             .article-header {
                 flex-direction: column;
@@ -733,13 +734,14 @@
             }
             .article-meta {
                 width: 100%;
-                font-size: 12px;
-                gap: 10px;
+                font-size: 11px;
+                gap: 8px;
+                flex-wrap: wrap;
             }
-            .article-summary { font-size: 14px; line-height: 1.6; }
+            .article-summary { font-size: 13px; line-height: 1.6; }
             .article-detail { 
-                font-size: 13px; 
-                padding: 12px;
+                font-size: 12px; 
+                padding: 10px;
                 line-height: 1.6;
             }
             .expand-btn { font-size: 13px; }
@@ -886,7 +888,7 @@
             <div class="meta-info">
                 <div class="meta-item">
                     <span class="date-display" onclick="openCalendar()" title="点击选择其他日期">
-                        <span class="date-display-text" id="current-date">2026-03-05 星期四</span>
+                        <span class="date-display-text" id="current-date">2026-03-06 星期五</span>
                         <span class="date-picker-icon">📅</span>
                     </span>
                 </div>
