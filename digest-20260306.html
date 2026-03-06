@@ -1410,7 +1410,11 @@
                 currentYear = today.getFullYear();
                 currentMonth = today.getMonth();
                 generateCalendar(currentYear, currentMonth);
+                console.log('切换到今天:', currentYear, currentMonth + 1);
             };
+            
+            // 添加调试日志
+            console.log('日历初始化完成，按钮已绑定');
             
             // 生成初始日历
             generateCalendar(currentYear, currentMonth);
