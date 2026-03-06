@@ -1387,6 +1387,14 @@
             const nextBtn = document.getElementById('next-month');
             const todayBtn = document.getElementById('today-btn');
             
+            // 调试：检查按钮是否存在
+            console.log('按钮检查:', { prevBtn, nextBtn, todayBtn });
+            
+            if (!todayBtn) {
+                console.error('错误：today-btn 元素未找到！');
+                return;
+            }
+            
             prevBtn.onclick = () => {
                 currentMonth--;
                 if (currentMonth < 0) {
