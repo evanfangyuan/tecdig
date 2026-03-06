@@ -683,10 +683,6 @@
 
         /* 响应式 - 手机端优化 */
         @media (max-width: 768px) {
-            /* 全局溢出控制 */
-            body { overflow-x: hidden; max-width: 100vw; }
-            .container { max-width: 100%; overflow-x: hidden; }
-            
             /* 报头区域 */
             .brand { font-size: 32px; }
             .subtitle { font-size: 14px; }
@@ -711,47 +707,43 @@
             .calendar-day.today::after { font-size: 9px; }
             
             /* 容器和板块 */
-            .container { padding: 20px 10px; }
-            .section { padding: 15px 10px; margin-bottom: 15px; max-width: 100%; }
-            .section-header { margin-bottom: 15px; padding-bottom: 10px; }
+            .container { padding: 20px 12px; }
+            .section { padding: 20px 15px; margin-bottom: 20px; }
+            .section-header { margin-bottom: 20px; padding-bottom: 12px; }
             .section-icon { font-size: 24px; }
-            .section-title { font-size: 18px; }
-            .section-desc { font-size: 12px; }
+            .section-title { font-size: 20px; }
+            .section-desc { font-size: 13px; }
             
             /* 导航标签 */
             .nav-tabs { gap: 8px; margin-bottom: 25px; }
             .nav-tab { padding: 8px 16px; font-size: 13px; }
             
             /* 文章卡片 */
-            .article-card { padding: 15px 12px; margin-bottom: 15px; max-width: 100%; overflow-wrap: break-word; }
+            .article-card { padding: 18px 15px; margin-bottom: 18px; }
             .article-title { 
-                font-size: 15px; 
-                width: 100%;
+                font-size: 16px; 
+                min-width: 100%;
                 order: -1;
                 margin-bottom: 8px;
-                line-height: 1.5;
-                word-break: break-word;
+                line-height: 1.4;
             }
             .article-header {
                 flex-direction: column;
                 gap: 8px;
-                width: 100%;
             }
             .article-meta {
                 width: 100%;
-                font-size: 11px;
-                gap: 8px;
-                flex-wrap: wrap;
+                font-size: 12px;
+                gap: 10px;
             }
-            .article-summary { font-size: 13px; line-height: 1.6; word-break: break-word; }
+            .article-summary { font-size: 14px; line-height: 1.6; }
             .article-detail { 
-                font-size: 12px; 
-                padding: 10px;
+                font-size: 13px; 
+                padding: 12px;
                 line-height: 1.6;
-                word-break: break-word;
             }
             .expand-btn { font-size: 13px; }
-            .tag { font-size: 11px; padding: 3px 8px; max-width: 100%; }
+            .tag { font-size: 11px; padding: 3px 8px; }
             
             /* 数据卡片 */
             .data-grid { 
@@ -764,15 +756,12 @@
             .data-trend { font-size: 11px; }
             
             /* 冷幽默卡片 */
-            .humor-card { padding: 18px 15px; margin-bottom: 15px; max-width: 100%; }
-            .humor-text { font-size: 14px; line-height: 1.6; word-break: break-word; }
+            .humor-card { padding: 18px 15px; margin-bottom: 15px; }
+            .humor-text { font-size: 14px; line-height: 1.6; }
             .humor-emoji { font-size: 18px; }
             
-            /* 表格溢出控制 */
-            table { max-width: 100%; overflow-x: auto; display: block; }
-            
             /* 底部 */
-            .footer { padding: 25px 15px; font-size: 12px; max-width: 100%; }
+            .footer { padding: 25px 15px; font-size: 12px; }
         }
         
         /* 超小屏幕（<375px） */
@@ -897,7 +886,7 @@
             <div class="meta-info">
                 <div class="meta-item">
                     <span class="date-display" onclick="openCalendar()" title="点击选择其他日期">
-                        <span class="date-display-text" id="current-date">2026-03-06 星期五</span>
+                        <span class="date-display-text" id="current-date">2026-03-05 星期四</span>
                         <span class="date-picker-icon">📅</span>
                     </span>
                 </div>
@@ -958,7 +947,7 @@
 
             <div class="article-card news">
                 <div class="article-header">
-                    <h3 class="article-title">Proton Mail 协助 FBI 识别 Anonymous 'Stop Cop City' 抗议者</h3>
+                    <h3 class="article-title">Proton Mail 协助 FBI 识别 匿名 'Stop Cop City' 抗议者</h3>
                     <div class="article-meta">
                         <span>🎯 60%</span>
                         <span>📰 Hacker News Frontpage</span>
@@ -1015,7 +1004,7 @@
 
             <div class="article-card news">
                 <div class="article-header">
-                    <h3 class="article-title">TensorFlow/TensorFlow: 开源机器学习框架 for Everyone</h3>
+                    <h3 class="article-title">tensorflow/tensorflow: 面向所有人的开源机器学习框架</h3>
                     <div class="article-meta">
                         <span>🎯 50%</span>
                         <span>📰 github-trending</span>
@@ -1110,7 +1099,7 @@
 
             <div class="article-card news">
                 <div class="article-header">
-                    <h3 class="article-title">Where things stand with the Department of War</h3>
+                    <h3 class="article-title">与战争部的关系现状</h3>
                     <div class="article-meta">
                         <span>🎯 50%</span>
                         <span>📰 Hacker News Frontpage</span>
@@ -1129,7 +1118,7 @@
 
             <div class="article-card news">
                 <div class="article-header">
-                    <h3 class="article-title">The next generations of Bubble Tea, Lip Gloss, and Bubbles are available now</h3>
+                    <h3 class="article-title">新一代 Bubble Tea、Lip Gloss 和 Bubbles 现已发布</h3>
                     <div class="article-meta">
                         <span>🎯 50%</span>
                         <span>📰 Hacker News Frontpage</span>
@@ -1148,7 +1137,7 @@
 
             <div class="article-card news">
                 <div class="article-header">
-                    <h3 class="article-title">Stop Using Grey Text (2025)</h3>
+                    <h3 class="article-title">停止使用灰色文字 (2025)</h3>
                     <div class="article-meta">
                         <span>🎯 50%</span>
                         <span>📰 Hacker News Frontpage</span>
@@ -1186,7 +1175,7 @@
 
             <div class="article-card news">
                 <div class="article-header">
-                    <h3 class="article-title">A standard protocol to handle and discard low-effort, AI-Generated pull requests</h3>
+                    <h3 class="article-title">处理低质量 AI 生成 PR 的标准协议</h3>
                     <div class="article-meta">
                         <span>🎯 50%</span>
                         <span>📰 Hacker News Frontpage</span>
@@ -1205,7 +1194,7 @@
 
             <div class="article-card news">
                 <div class="article-header">
-                    <h3 class="article-title">Ethiopia gets $350M World Bank financing for its digital ID project (2024)</h3>
+                    <h3 class="article-title">埃塞俄比亚获得世界银行 3.5 亿美元数字 ID 项目融资 (2024)</h3>
                     <div class="article-meta">
                         <span>🎯 50%</span>
                         <span>📰 Hacker News Frontpage</span>
@@ -1240,8 +1229,7 @@
                 <div class="expand-btn">📖 展开深度解读</div>
             </div>
 
-</section>
-
+        </section>
         <!-- 概念解决 -->
         <section class="section" id="solution-section">
             <div class="section-header">
@@ -1253,7 +1241,7 @@
 
             <div class="article-card solution">
                 <div class="article-header">
-                    <h3 class="article-title">TensorFlow/TensorFlow: 开源机器学习框架 for Everyone</h3>
+                    <h3 class="article-title">tensorflow/tensorflow: 面向所有人的开源机器学习框架</h3>
                     <div class="article-meta">
                         <span>🎯 50%</span>
                         <span>📰 未知</span>
@@ -1340,8 +1328,7 @@
                 <div class="expand-btn">📖 展开应用场景</div>
             </div>
 
-</section>
-
+        </section>
         <!-- 行业深挖 -->
         <section class="section" id="industry-section">
             <div class="section-header">
@@ -1363,6 +1350,23 @@
                 </div>
                 <div class="article-detail">
                     <strong>投资逻辑：</strong>该行业动态反映市场趋势。Hacker News Frontpage 的报道质量较高，建议投资者关注相关赛道的估值变化。
+                </div>
+                <div class="expand-btn">📖 展开投资逻辑</div>
+            </div>
+
+
+            <div class="article-card industry">
+                <div class="article-header">
+                    <h3 class="article-title">tensorzero/tensorzero: TensorZero is an open-source stack for industrial-grade LLM applications. It unifies an LLM gateway, observability, optimization, evaluation, and experimentation.</h3>
+                    <div class="article-meta">
+                        <span>📰 未知</span>
+                    </div>
+                </div>
+                <div class="article-summary">
+                    TensorZero is an open-source stack for industrial-grade LLM applications. It unifies an LLM gateway, observability, optimization, evaluation, and experimentation.
+                </div>
+                <div class="article-detail">
+                    <strong>投资逻辑：</strong>该行业动态反映市场趋势。未知 的报道质量较高，建议投资者关注相关赛道的估值变化。
                 </div>
                 <div class="expand-btn">📖 展开投资逻辑</div>
             </div>
@@ -1418,25 +1422,7 @@
                 <div class="expand-btn">📖 展开投资逻辑</div>
             </div>
 
-
-            <div class="article-card industry">
-                <div class="article-header">
-                    <h3 class="article-title">Workers report watching Ray-Ban Meta-shot footage of people using the bathroom</h3>
-                    <div class="article-meta">
-                        <span>📰 Ars Technica</span>
-                    </div>
-                </div>
-                <div class="article-summary">
-                    
-                </div>
-                <div class="article-detail">
-                    <strong>投资逻辑：</strong>该行业动态反映市场趋势。Ars Technica 的报道质量较高，建议投资者关注相关赛道的估值变化。
-                </div>
-                <div class="expand-btn">📖 展开投资逻辑</div>
-            </div>
-
-</section>
-
+        </section>
         <!-- 投资风险 -->
         <section class="section" id="risk-section">
             <div class="section-header">
@@ -1462,8 +1448,7 @@
                 <div class="expand-btn">📖 展开风险提示</div>
             </div>
 
-</section>
-
+        </section>
         <!-- 科技数据 -->
         <section class="section" id="data-section">
             <div class="section-header">
