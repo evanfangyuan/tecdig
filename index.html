@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>科技芯声 | 2026-03-06</title>
+    <title>科技芯声 | 2026 年 3 月 6 日</title>
     <style>
         * {
             margin: 0;
@@ -772,7 +772,7 @@
             .data-grid { grid-template-columns: 1fr; }
             .nav-tabs { flex-wrap: wrap; }
         }
-        
+
         /* 微信二维码浮窗 */
         .wechat-float {
             position: fixed;
@@ -870,6 +870,7 @@
                 font-size: 11px;
             }
         }
+
     </style>
 </head>
 <body>
@@ -885,7 +886,7 @@
             <div class="meta-info">
                 <div class="meta-item">
                     <span class="date-display" onclick="openCalendar()" title="点击选择其他日期">
-                        <span class="date-display-text" id="current-date">2026-03-06 星期五</span>
+                        <span class="date-display-text" id="current-date">2026 年 3 月 6 日 星期二</span>
                         <span class="date-picker-icon">📅</span>
                     </span>
                 </div>
@@ -1387,14 +1388,6 @@
             const nextBtn = document.getElementById('next-month');
             const todayBtn = document.getElementById('today-btn');
             
-            // 调试：检查按钮是否存在
-            console.log('按钮检查:', { prevBtn, nextBtn, todayBtn });
-            
-            if (!todayBtn) {
-                console.error('错误：today-btn 元素未找到！');
-                return;
-            }
-            
             prevBtn.onclick = () => {
                 currentMonth--;
                 if (currentMonth < 0) {
@@ -1441,13 +1434,8 @@
                             }, 1000);
                         }
                     });
-                    
-                    console.log('已切换到今天:', currentYear, currentMonth + 1, todayDate);
                 }, 100);
             };
-            
-            // 添加调试日志
-            console.log('日历初始化完成，按钮已绑定');
             
             // 生成初始日历
             generateCalendar(currentYear, currentMonth);
@@ -1558,6 +1546,7 @@
             updateProgressBar();
             handleScrollAnimation();
         });
+
         
         // 微信二维码切换
         function toggleWechatCard() {
@@ -1566,7 +1555,9 @@
             const btn = document.querySelector('.wechat-toggle');
             btn.textContent = card.classList.contains('collapsed') ? '📱' : '✕ 收起';
         }
+
     </script>
+
     
     <!-- 微信二维码浮窗 -->
     <div class="wechat-float">
@@ -1580,5 +1571,6 @@
             </div>
         </div>
     </div>
+
 </body>
 </html>
