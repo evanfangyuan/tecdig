@@ -20,6 +20,7 @@
             line-height: 1.6;
         }
 
+        /* 背景效果 */
         .grid-bg {
             position: fixed;
             top: 0;
@@ -69,6 +70,7 @@
             z-index: 1;
         }
 
+        /* 报头区域 */
         .masthead {
             text-align: center;
             margin-bottom: 60px;
@@ -117,6 +119,7 @@
             color: #00d4ff;
         }
 
+        /* 日期选择器（整合到日期显示） */
         .date-display {
             display: inline-flex;
             align-items: center;
@@ -124,8 +127,257 @@
             background: rgba(0, 212, 255, 0.15);
             padding: 6px 14px;
             border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
         }
 
+        .date-display:hover {
+            background: rgba(0, 212, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .date-display-text {
+            color: #00d4ff;
+            font-size: 14px;
+        }
+
+        .date-picker-icon {
+            font-size: 16px;
+            opacity: 0.8;
+            transition: transform 0.3s ease;
+        }
+
+        .date-display:hover .date-picker-icon {
+            transform: scale(1.1);
+        }
+
+        /* 日历模态框 */
+        .calendar-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .calendar-modal.show {
+            display: flex;
+        }
+
+        .calendar-modal-content {
+            background: linear-gradient(135deg, #1a1a3e 0%, #0f0f2d 100%);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 16px;
+            padding: 25px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.2);
+        }
+
+        .calendar-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-modal-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .calendar-modal-close {
+            background: transparent;
+            border: none;
+            color: #8888aa;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0 5px;
+            transition: color 0.3s ease;
+        }
+
+        .calendar-modal-close:hover {
+            color: #fff;
+        }
+
+        .calendar-container {
+            margin-bottom: 15px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-nav button {
+            background: rgba(0, 212, 255, 0.2);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            color: #00d4ff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-nav button:hover {
+            background: rgba(0, 212, 255, 0.3);
+        }
+
+        .calendar-nav button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-weekday {
+            text-align: center;
+            font-size: 12px;
+            color: #8888aa;
+            padding: 8px 0;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ccccdd;
+        }
+
+        .calendar-day:hover:not(.disabled) {
+            background: rgba(0, 212, 255, 0.3);
+            color: #fff;
+        }
+
+        .calendar-day.today {
+            border: 2px solid #00d4ff;
+            background: rgba(0, 212, 255, 0.15);
+            position: relative;
+        }
+        
+        .calendar-day.today::after {
+            content: '今';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #00d4ff;
+            color: #fff;
+            font-size: 10px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-day.current-page {
+            border: 3px solid #2ed573;
+            background: rgba(46, 213, 115, 0.3);
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .calendar-day.current-page::after {
+            content: '当前';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2ed573;
+            color: #fff;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            white-space: nowrap;
+        }
+
+        .calendar-day.has-content {
+            background: rgba(46, 213, 115, 0.2);
+            color: #2ed573;
+        }
+        
+        .calendar-day.has-content.current-page {
+            background: rgba(46, 213, 115, 0.3);
+        }
+
+        .calendar-day.has-content:hover {
+            background: rgba(46, 213, 115, 0.4);
+        }
+
+        .calendar-day.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .calendar-day.empty {
+            background: transparent;
+            cursor: default;
+        }
+
+        .calendar-legend {
+            text-align: center;
+            font-size: 12px;
+            color: #8888aa;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .legend-dot.has-content {
+            background: rgba(46, 213, 115, 0.4);
+        }
+
+        .legend-dot.today {
+            border: 2px solid #00d4ff;
+            background: rgba(0, 212, 255, 0.2);
+        }
+
+        /* 导航栏 */
         .nav-tabs {
             display: flex;
             justify-content: center;
@@ -152,6 +404,7 @@
             transform: translateY(-2px);
         }
 
+        /* 板块样式 */
         .section {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -159,6 +412,14 @@
             padding: 35px;
             margin-bottom: 35px;
             backdrop-filter: blur(10px);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .section-header {
@@ -172,6 +433,12 @@
 
         .section-icon {
             font-size: 32px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
 
         .section-title {
@@ -179,9 +446,10 @@
             font-weight: bold;
         }
 
-        .section-title.news { color: #ff4757; }
-        .section-title.signal { color: #ffa502; }
-        .section-title.early { color: #2ed573; }
+        .section-title.news { color: #00d4ff; }
+        .section-title.solution { color: #2ed573; }
+        .section-title.industry { color: #ffa502; }
+        .section-title.risk { color: #ff4757; }
         .section-title.data { color: #7b2ff7; }
         .section-title.humor { color: #9b59b6; }
 
@@ -191,6 +459,7 @@
             margin-top: 5px;
         }
 
+        /* 新闻卡片 */
         .article-card {
             background: rgba(255, 255, 255, 0.05);
             border-left: 4px solid;
@@ -198,6 +467,7 @@
             padding: 25px;
             margin-bottom: 25px;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .article-card:hover {
@@ -206,10 +476,10 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
-        .article-card.high { border-color: #ff4757; }
-        .article-card.medium { border-color: #ffa502; }
-        .article-card.low { border-color: #2ed573; }
-        .article-card.data { border-color: #7b2ff7; }
+        .article-card.news { border-color: #00d4ff; }
+        .article-card.solution { border-color: #2ed573; }
+        .article-card.industry { border-color: #ffa502; }
+        .article-card.risk { border-color: #ff4757; }
         .article-card.humor { border-color: #9b59b6; }
 
         .article-header {
@@ -226,6 +496,7 @@
             font-weight: bold;
             color: #ffffff;
             flex: 1;
+            min-width: 100%;
         }
 
         .article-meta {
@@ -236,27 +507,21 @@
             flex-wrap: wrap;
         }
 
-        .confidence {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        .confidence.high {
-            background: rgba(255, 71, 87, 0.2);
-            color: #ff4757;
+        .article-meta a {
+            color: #00d4ff;
+            text-decoration: none;
+            transition: color 0.3s ease;
         }
 
-        .confidence.medium {
-            background: rgba(255, 165, 2, 0.2);
-            color: #ffa502;
-        }
-
-        .confidence.low {
-            background: rgba(46, 213, 115, 0.2);
-            color: #2ed573;
+        .article-meta a:hover {
+            color: #7b2ff7;
+            text-decoration: underline;
         }
 
         .article-summary {
@@ -274,10 +539,32 @@
             font-size: 14px;
             color: #aaaacc;
             line-height: 1.8;
+            display: none;
         }
 
-        .article-detail strong {
+        .article-card.expanded .article-detail {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .expand-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
             color: #00d4ff;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .expand-btn:hover {
+            color: #7b2ff7;
         }
 
         .tag {
@@ -290,6 +577,7 @@
             margin-right: 8px;
         }
 
+        /* 数据看板 */
         .data-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -297,8 +585,8 @@
         }
 
         .data-card {
-            background: linear-gradient(135deg, rgba(123, 47, 247, 0.1), rgba(0, 212, 255, 0.1));
-            border: 1px solid rgba(123, 47, 247, 0.3);
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 47, 247, 0.1));
+            border: 1px solid rgba(0, 212, 255, 0.3);
             border-radius: 12px;
             padding: 25px;
             text-align: center;
@@ -307,13 +595,13 @@
 
         .data-card:hover {
             transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(123, 47, 247, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
         }
 
         .data-value {
             font-size: 42px;
             font-weight: bold;
-            color: #7b2ff7;
+            color: #00d4ff;
             margin-bottom: 8px;
         }
 
@@ -332,6 +620,7 @@
             color: #ff4757;
         }
 
+        /* 冷幽默卡片 */
         .humor-card {
             background: linear-gradient(135deg, rgba(155, 89, 182, 0.15), rgba(0, 212, 255, 0.1));
             border: 1px solid rgba(155, 89, 182, 0.3);
@@ -366,6 +655,7 @@
             margin-right: 10px;
         }
 
+        /* 底部 */
         .footer {
             text-align: center;
             padding: 40px 20px;
@@ -380,6 +670,7 @@
             text-decoration: none;
         }
 
+        /* 滚动进度 */
         .progress-bar {
             position: fixed;
             top: 0;
@@ -390,12 +681,196 @@
             transition: width 0.1s ease;
         }
 
+        /* 响应式 - 手机端优化 */
         @media (max-width: 768px) {
+            /* 报头区域 */
             .brand { font-size: 32px; }
+            .subtitle { font-size: 14px; }
+            .masthead { padding: 25px 15px; margin-bottom: 30px; }
+            .meta-info { gap: 10px; }
+            .meta-item { font-size: 12px; padding: 5px 10px; }
+            .date-display { padding: 6px 12px; }
+            .date-display-text { font-size: 13px; }
+            .date-picker-icon { font-size: 14px; }
+            
+            /* 日历模态框 */
+            .calendar-modal-content { 
+                padding: 20px; 
+                width: 95%;
+                max-width: 350px;
+            }
+            .calendar-modal-title { font-size: 16px; }
+            .calendar-grid { gap: 3px; }
+            .calendar-day { font-size: 13px; }
+            .calendar-weekday { font-size: 11px; }
+            .calendar-day.current-page::after,
+            .calendar-day.today::after { font-size: 9px; }
+            
+            /* 容器和板块 */
+            .container { padding: 20px 12px; }
+            .section { padding: 20px 15px; margin-bottom: 20px; }
+            .section-header { margin-bottom: 20px; padding-bottom: 12px; }
+            .section-icon { font-size: 24px; }
             .section-title { font-size: 20px; }
-            .article-title { font-size: 16px; }
-            .data-grid { grid-template-columns: repeat(2, 1fr); }
+            .section-desc { font-size: 13px; }
+            
+            /* 导航标签 */
+            .nav-tabs { gap: 8px; margin-bottom: 25px; }
+            .nav-tab { padding: 8px 16px; font-size: 13px; }
+            
+            /* 文章卡片 */
+            .article-card { padding: 18px 15px; margin-bottom: 18px; }
+            .article-title { 
+                font-size: 16px; 
+                min-width: 100%;
+                order: -1;
+                margin-bottom: 8px;
+                line-height: 1.4;
+            }
+            .article-header {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .article-meta {
+                width: 100%;
+                font-size: 12px;
+                gap: 10px;
+            }
+            .article-summary { font-size: 14px; line-height: 1.6; }
+            .article-detail { 
+                font-size: 13px; 
+                padding: 12px;
+                line-height: 1.6;
+            }
+            .expand-btn { font-size: 13px; }
+            .tag { font-size: 11px; padding: 3px 8px; }
+            
+            /* 数据卡片 */
+            .data-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 12px;
+            }
+            .data-card { padding: 18px 12px; }
+            .data-value { font-size: 28px; }
+            .data-label { font-size: 12px; }
+            .data-trend { font-size: 11px; }
+            
+            /* 冷幽默卡片 */
+            .humor-card { padding: 18px 15px; margin-bottom: 15px; }
+            .humor-text { font-size: 14px; line-height: 1.6; }
+            .humor-emoji { font-size: 18px; }
+            
+            /* 底部 */
+            .footer { padding: 25px 15px; font-size: 12px; }
         }
+        
+        /* 超小屏幕（<375px） */
+        @media (max-width: 375px) {
+            .brand { font-size: 28px; }
+            .section-title { font-size: 18px; }
+            .article-title { font-size: 15px; }
+            .data-grid { grid-template-columns: 1fr; }
+            .nav-tabs { flex-wrap: wrap; }
+        }
+
+        /* 微信二维码浮窗 */
+        .wechat-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .wechat-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            max-width: 220px;
+            text-align: center;
+        }
+        
+        .wechat-card.collapsed {
+            padding: 10px;
+            max-width: 60px;
+        }
+        
+        .wechat-card.collapsed .qr-text,
+        .wechat-card.collapsed .qr-image {
+            display: none;
+        }
+        
+        .wechat-toggle {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #00d4ff, #7b2ff7);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 212, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .wechat-toggle:hover {
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.6);
+        }
+        
+        .qr-image {
+            width: 180px;
+            height: 180px;
+            margin: 10px auto;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        .qr-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .qr-text {
+            color: #333;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-top: 12px;
+            font-weight: 500;
+        }
+        
+        .wechat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .wechat-float {
+                bottom: 15px;
+                right: 15px;
+            }
+            .wechat-card {
+                max-width: 180px;
+                padding: 15px;
+            }
+            .qr-image {
+                width: 140px;
+                height: 140px;
+            }
+            .qr-text {
+                font-size: 11px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -404,369 +879,519 @@
     <div class="progress-bar" id="progressBar"></div>
 
     <div class="container">
+        <!-- 报头 -->
         <header class="masthead">
             <h1 class="brand">📰 科技芯声</h1>
             <p class="subtitle">Tech Core Voice</p>
             <div class="meta-info">
                 <div class="meta-item">
-                    <span class="date-display">2026年3月10日 星期二</span>
+                    <span class="date-display" onclick="openCalendar()" title="点击选择其他日期">
+                        <span class="date-display-text" id="current-date">2026 年 3 月 10 日 星期二</span>
+                        <span class="date-picker-icon">📅</span>
+                    </span>
                 </div>
             </div>
         </header>
+        
+        <!-- 日历模态框 -->
+        <div class="calendar-modal" id="calendar-modal">
+            <div class="calendar-modal-content">
+                <div class="calendar-modal-header">
+                    <div class="calendar-modal-title" id="calendar-month">2026 年 3 月</div>
+                    <button class="calendar-modal-close" onclick="closeCalendar()">×</button>
+                </div>
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <div class="calendar-nav">
+                            <button id="prev-month" title="上个月">◀</button>
+                            <button id="today-btn" title="回到今天">今天</button>
+                            <button id="next-month" title="下个月">▶</button>
+                        </div>
+                    </div>
+                    <div class="calendar-grid" id="calendar-grid">
+                        <!-- 日历由 JavaScript 动态生成 -->
+                    </div>
+                </div>
+                <div class="calendar-legend">
+                    <div class="legend-item">
+                        <div class="legend-dot has-content"></div>
+                        <span>有资讯</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot today"></div>
+                        <span>今天</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <!-- 导航 -->
         <nav class="nav-tabs">
-            <div class="nav-tab active" data-section="all">全部</div>
-            <div class="nav-tab" data-section="high">🔴 高优先级</div>
-            <div class="nav-tab" data-section="medium">🟡 中优先级</div>
-            <div class="nav-tab" data-section="early">🟢 早期苗头</div>
-            <div class="nav-tab" data-section="data">📊 数据看板</div>
+            <div class="nav-tab active" data-section="all">📰 全部</div>
+            <div class="nav-tab" data-section="news">🔥 科技新闻</div>
+            <div class="nav-tab" data-section="solution">💡 概念解决</div>
+            <div class="nav-tab" data-section="industry">🏭 行业深挖</div>
+            <div class="nav-tab" data-section="risk">⚠️ 投资风险</div>
+            <div class="nav-tab" data-section="data">📊 科技数据</div>
             <div class="nav-tab" data-section="humor">❄️ 冷幽默</div>
         </nav>
 
-        <!-- 高优先级异动 -->
-        <section class="section" id="high-section">
+        <!-- 科技新闻 -->
+        <section class="section visible" id="news-section">
             <div class="section-header">
-                <span class="section-icon">🔴</span>
+                <span class="section-icon">🔥</span>
                 <div>
-                    <h2 class="section-title news">高优先级异动</h2>
-                    <p class="section-desc">需要立即关注的重要科技事件</p>
+                    <h2 class="section-title news">科技新闻</h2>
+                    <p class="section-desc">全球科技圈最新动态，热点事件一手掌握</p>
                 </div>
             </div>
-
-            <div class="article-card high">
+            
+            <div class="article-card news">
                 <div class="article-header">
                     <h3 class="article-title">Bluesky CEO Jay Graber 宣布卸任</h3>
-                    <span class="confidence high">置信度 95%</span>
-                </div>
-                <div class="article-meta">
-                    <span>📰 来源: HackerNews</span>
-                    <span>🏷️ 标签: <span class="tag">社交媒体</span><span class="tag">去中心化</span></span>
+                    <div class="article-meta">
+                        <span>🎯 95%</span>
+                        <span>📰 HackerNews</span>
+                    </div>
                 </div>
                 <div class="article-summary">
-                    去中心化社交平台 Bluesky 的 CEO Jay Graber 突然宣布卸任，引发行业震动。该平台作为 Twitter/X 的替代品曾获得广泛关注。
+                    <span class="tag">社交</span><span class="tag">去中心化</span>
+                    去中心化社交平台 Bluesky 的 CEO Jay Graber 突然宣布卸任，引发行业震动。
                 </div>
                 <div class="article-detail">
-                    <strong>影响分析：</strong>去中心化社交赛道格局可能重塑，Mastodon 等竞品或迎来窗口期；对依赖 Bluesky 的开发者生态产生不确定性。此举可能暗示去中心化社交商业模式仍面临挑战。
+                    <strong>深度解读：</strong>Bluesky CEO 的突然卸任标志着去中心化社交赛道进入关键转折点。作为 Twitter 联合创始人 Jack Dorsey 支持的项目，Bluesky 曾被视为 Twitter 的"去中心化替代品"，其 CEO 离职可能引发投资者和开发者社区的信任危机。从竞争格局看，Mastodon、Nostr 等竞品可能迎来窗口期，吸引原本倾向于 Bluesky 的用户和开发者。对于依赖 Bluesky 协议（AT Protocol）构建应用的开发者而言，领导层变动带来生态不确定性，可能加速多平台适配策略。监管层面，去中心化社交平台的治理结构缺陷可能被放大，引发对 DAO 模式可持续性的质疑。投资者应关注 Bluesky 的继任者任命进度、核心团队稳定性以及用户增长趋势，短期内建议观望而非激进布局。
                 </div>
+                <div class="expand-btn">📖 展开深度解读</div>
             </div>
 
-            <div class="article-card high">
+            <div class="article-card news">
                 <div class="article-header">
                     <h3 class="article-title">OpenAI 发布 Symphony：AI 项目自主执行框架</h3>
-                    <span class="confidence high">置信度 90%</span>
-                </div>
-                <div class="article-meta">
-                    <span>📰 来源: GitHub/OpenAI</span>
-                    <span>⭐ Stars: 10,268</span>
-                    <span>🏷️ 标签: <span class="tag">AI Agent</span><span class="tag">OpenAI</span></span>
+                    <div class="article-meta">
+                        <span>🎯 90%</span>
+                        <span>📰 GitHub</span>
+                    </div>
                 </div>
                 <div class="article-summary">
-                    OpenAI 开源 Symphony，将项目工作转化为隔离的自主实现运行，让团队专注于管理而非监督编码代理。这是 OpenAI 在 Agent 基础设施领域的重大布局。
+                    <span class="tag">AI</span><span class="tag">框架</span>
+                    OpenAI 开源 Symphony，将项目工作转化为隔离的自主实现运行，让团队专注于管理而非监督编码代理。
                 </div>
                 <div class="article-detail">
-                    <strong>影响分析：</strong>标志着 AI Agent 从"辅助编程"向"自主项目管理"演进；可能改变软件工程团队协作模式。与 Devin、GitHub Copilot Workspace 形成直接竞争，AI 编程工具进入"自主执行"新阶段。
+                    <strong>深度解读：</strong>Symphony 的发布标志着 AI Agent 从"辅助编程"向"自主项目管理"的重大演进。与 GitHub Copilot 等代码补全工具不同，Symphony 实现了端到端的任务自动化：需求分析 → 代码生成 → 测试验证 → 部署上线，人类只需在关键节点审批。这将深刻改变软件工程团队的协作模式——项目经理可能转型为"AI 监督员"，程序员则更多负责架构设计和异常处理。从市场影响看，Symphony 直接挑战传统项目管理工具（Jira、Asana）和低代码平台，可能催生新一代"AI 原生"开发环境。然而，完全自主的代码生成也带来了质量和安全风险的担忧：谁来为 AI 生成的 bug 负责？如何确保代码符合企业合规要求？建议企业采用渐进式引入策略，先从非核心模块试点，建立完善的代码审查和回滚机制。
                 </div>
+                <div class="expand-btn">📖 展开深度解读</div>
             </div>
 
-            <div class="article-card high">
+            <div class="article-card news">
                 <div class="article-header">
                     <h3 class="article-title">Google 发布 ADK-JS：TypeScript AI Agent 开发工具包</h3>
-                    <span class="confidence high">置信度 90%</span>
-                </div>
-                <div class="article-meta">
-                    <span>📰 来源: GitHub/Google</span>
-                    <span>⭐ Stars: 884+</span>
-                    <span>🏷️ 标签: <span class="tag">Google</span><span class="tag">TypeScript</span></span>
+                    <div class="article-meta">
+                        <span>🎯 90%</span>
+                        <span>📰 GitHub</span>
+                    </div>
                 </div>
                 <div class="article-summary">
-                    Google 开源 ADK-JS，面向 TypeScript 开发者的 AI Agent 构建、评估和部署工具包。采用代码优先（code-first）设计理念。
+                    <span class="tag">AI</span><span class="tag">TypeScript</span>
+                    Google 开源 ADK-JS，面向 TypeScript 开发者的 AI Agent 构建、评估和部署工具包。
                 </div>
                 <div class="article-detail">
-                    <strong>影响分析：</strong>与 OpenAI Symphony 形成直接竞争，AI Agent 框架进入巨头混战阶段；TypeScript 生态获益。Google 在 Agent 基础设施领域加速追赶，企业级市场争夺白热化。
+                    <strong>深度解读：</strong>ADK-JS 的发布标志着 AI Agent 框架进入巨头混战阶段。与 OpenAI Symphony 形成直接竞争，Google 选择 TypeScript 生态作为切入点，瞄准的是企业级应用开发者群体。TypeScript 的静态类型检查和良好 IDE 支持，使其成为构建复杂 AI 系统的理想选择。ADK-JS 的优势在于与 Google Cloud 生态的深度整合，包括 Vertex AI、Firebase、Workspace 等，这对于已使用 Google 技术栈的企业具有吸引力。然而，开发者社区对 Google 产品的长期支持存在顾虑（历史上 Google 曾放弃多个项目，如 Google Reader、Google+、Stadia），这可能影响采用决策。对于投资者，ADK-JS 的发布强化了 TypeScript 在 AI 时代的地位，相关工具链（如 Mastra、Vercel AI SDK）可能受益。建议关注框架的实际采用率（npm 下载量、GitHub stars 增长）、企业案例落地情况以及社区反馈质量。
                 </div>
+                <div class="expand-btn">📖 展开深度解读</div>
             </div>
 
-            <div class="article-card high">
+            <div class="article-card news">
                 <div class="article-header">
                     <h3 class="article-title">Meta Ray-Ban 智能眼镜隐私丑闻发酵</h3>
-                    <span class="confidence high">置信度 85%</span>
-                </div>
-                <div class="article-meta">
-                    <span>📰 来源: HackerNews</span>
-                    <span>🏷️ 标签: <span class="tag">隐私</span><span class="tag">AI硬件</span></span>
+                    <div class="article-meta">
+                        <span>🎯 85%</span>
+                        <span>📰 HackerNews</span>
+                    </div>
                 </div>
                 <div class="article-summary">
-                    工人报告观看了 Ray-Ban Meta 拍摄的卫生间使用画面，引发严重隐私担忧。这一事件暴露了 AI 硬件在数据处理和人工审核环节的漏洞。
+                    <span class="tag">硬件</span><span class="tag">隐私</span>
+                    工人报告观看了 Ray-Ban Meta 拍摄的卫生间使用画面，引发严重隐私担忧。
                 </div>
                 <div class="article-detail">
-                    <strong>影响分析：</strong>AI 硬件隐私监管压力加大；可能影响智能眼镜市场接受度；欧盟 AI 法案执行力度或加强。Meta 面临公关危机，竞争对手可能借机强调隐私保护优势。
+                    <strong>深度解读：</strong>Ray-Ban Meta 隐私丑闻是 AI 硬件发展史上的重要警示事件。外包工人能够接触到用户拍摄的私密画面，暴露了 Meta 在数据处理和人工审核环节的严重漏洞。这一事件可能产生三重影响：首先，消费者对智能眼镜的接受度将显著下降，"始终在线"的摄像头设计面临伦理质疑；其次，欧盟 AI 法案等监管框架的执行力度可能加强，AI 硬件的隐私合规成本将上升；第三，竞争对手（如 Apple Vision Pro）可能借机强调隐私保护优势。对于投资者，需要重新评估 AI 硬件赛道的风险收益比：隐私合规不再是"可选项"而是"生死线"，建议关注企业的数据治理架构、第三方审核机制以及用户知情权保障措施。长期来看，端侧 AI 处理（本地计算而非云端传输）可能成为隐私敏感场景的技术方向。
                 </div>
-            </div>
-        </section>
-
-        <!-- 中优先级信号 -->
-        <section class="section" id="medium-section">
-            <div class="section-header">
-                <span class="section-icon">🟡</span>
-                <div>
-                    <h2 class="section-title signal">中优先级信号</h2>
-                    <p class="section-desc">值得关注的行业动态与趋势</p>
-                </div>
+                <div class="expand-btn">📖 展开深度解读</div>
             </div>
 
-            <div class="article-card medium">
+            <div class="article-card news">
                 <div class="article-header">
                     <h3 class="article-title">Mastra AI 框架热度飙升</h3>
-                    <span class="confidence medium">置信度 85%</span>
-                </div>
-                <div class="article-meta">
-                    <span>📰 来源: GitHub Trending</span>
-                    <span>⭐ Stars: 21,833</span>
-                    <span>🏷️ 标签: <span class="tag">TypeScript</span><span class="tag">AI框架</span></span>
+                    <div class="article-meta">
+                        <span>🎯 85%</span>
+                        <span>📰 GitHub</span>
+                    </div>
                 </div>
                 <div class="article-summary">
-                    来自 Gatsby 团队的 Mastra 框架获得 21K+ stars，成为构建 AI 应用的热门选择。提供现代 TypeScript 技术栈的 AI 应用开发能力。
+                    <span class="tag">AI</span><span class="tag">框架</span>
+                    来自 Gatsby 团队的 Mastra 框架获得 21K+ stars，成为构建 AI 应用的热门选择。
                 </div>
                 <div class="article-detail">
-                    <strong>影响分析：</strong>TypeScript + AI 组合持续走强；对传统 Node.js 后端框架形成替代压力。Gatsby 团队的技术口碑为项目带来早期用户信任。
+                    <strong>深度解读：</strong>Mastra 的快速崛起反映了 TypeScript 生态在 AI 时代的强势地位。由 Gatsby 团队（静态站点生成器领域的知名团队）打造，Mastra 继承了优秀的开发者体验设计：类型安全、良好文档、丰富示例。与 LangChain 等 Python 主导的框架相比，Mastra 的优势在于与现代前端技术栈（Next.js、Vercel）的无缝整合，这对于全栈开发者极具吸引力。从竞争格局看，Mastra 的流行可能加速传统 Node.js 后端框架（Express、Koa）的衰落，新一代 AI 原生框架将取而代之。投资者应关注 Mastra 的商业化路径：目前以开源为主，未来可能通过云服务（托管 Agent、可观测性）变现。建议评估其企业采用率、社区贡献者数量以及核心团队背景，21K stars 已证明产品市场匹配度，下一步是证明商业模式可行性。
                 </div>
+                <div class="expand-btn">📖 展开深度解读</div>
             </div>
 
-            <div class="article-card medium">
+        </section>
+        <!-- 概念解决 -->
+        <section class="section" id="solution-section">
+            <div class="section-header">
+                <span class="section-icon">💡</span>
+                <div>
+                    <h2 class="section-title solution">概念解决</h2>
+                    <p class="section-desc">新技术如何解决实际问题，落地应用案例解析</p>
+                </div>
+            </div>
+            
+            <div class="article-card solution">
                 <div class="article-header">
-                    <h3 class="article-title">Karpathy 发布 AutoResearch：单 GPU 自动研究代理</h3>
-                    <span class="confidence medium">置信度 85%</span>
-                </div>
-                <div class="article-meta">
-                    <span>📰 来源: GitHub/karpathy</span>
-                    <span>⭐ Stars: 15,941</span>
-                    <span>🏷️ 标签: <span class="tag">AutoML</span><span class="tag">研究自动化</span></span>
+                    <h3 class="article-title">Karpathy AutoResearch：单 GPU 自动研究代理</h3>
+                    <div class="article-meta">
+                        <span>🎯 85%</span>
+                        <span>📰 GitHub</span>
+                    </div>
                 </div>
                 <div class="article-summary">
-                    Andrej Karpathy 开源 autoresearch，AI 代理在单 GPU 上自动运行 nanochat 训练研究。降低 AI 研究门槛，让个人研究者也能进行系统性实验。
+                    <span class="tag">AI</span><span class="tag">研究</span>
+                    Andrej Karpathy 开源 autoresearch，AI 代理在单 GPU 上自动运行 nanochat 训练研究。
                 </div>
                 <div class="article-detail">
-                    <strong>影响分析：</strong>降低 AI 研究门槛；可能催生"平民化"模型训练浪潮；对算力租赁市场形成利好。Karpathy 的背书使项目迅速获得关注。
+                    <strong>应用场景：</strong>AutoResearch 是降低 AI 研究门槛的突破性工具，典型应用场景包括：1) 学术研究 - 研究生和博士生可自动化运行大量消融实验，加速论文迭代；2) 初创公司模型调优 - 资源有限的团队可在单卡上自动探索超参数空间，找到性价比最优的模型配置；3) 教育机构教学 - 学生可在个人 GPU 上体验完整的模型训练流程，无需昂贵的云计算资源；4) 个人开发者实验 - 快速验证新架构或训练技巧的有效性，降低试错成本。AutoResearch 的核心价值在于"自动化"：从数据预处理、模型构建、训练监控到结果分析，全流程无需人工干预。这对于算力租赁市场也是利好——用户可以用更少的 GPU 时间完成更多实验。建议使用者关注实验的可复现性，保存完整的配置和随机种子，便于结果验证和论文发表。
                 </div>
+                <div class="expand-btn">📖 展开应用场景</div>
             </div>
 
-            <div class="article-card medium">
+            <div class="article-card solution">
                 <div class="article-header">
                     <h3 class="article-title">Paperclip：零人力公司开源编排工具</h3>
-                    <span class="confidence medium">置信度 80%</span>
-                </div>
-                <div class="article-meta">
-                    <span>📰 来源: GitHub</span>
-                    <span>⭐ Stars: 14,131</span>
-                    <span>🏷️ 标签: <span class="tag">自动化</span><span class="tag">企业AI</span></span>
+                    <div class="article-meta">
+                        <span>🎯 80%</span>
+                        <span>📰 GitHub</span>
+                    </div>
                 </div>
                 <div class="article-summary">
-                    Paperclip 开源，提供零人力公司的编排能力。通过 AI 代理实现业务流程自动化，减少人工干预。
+                    <span class="tag">AI</span><span class="tag">自动化</span>
+                    Paperclip 开源，提供零人力公司的编排能力，14K+ stars。
                 </div>
                 <div class="article-detail">
-                    <strong>影响分析：</strong>"AI 员工"概念从实验走向生产；对传统 SaaS 自动化工具（如 Zapier）形成冲击。企业级 AI 自动化进入新阶段。
+                    <strong>应用场景：</strong>Paperclip 代表了"AI 员工"概念从实验走向生产的关键一步，典型应用场景包括：1) 电商运营 - 自动处理订单、库存同步、客服回复，实现 7x24 小时无人值守；2) 内容创作工作室 - AI 自动完成选题、撰写、配图、发布全流程，人类只需审核；3) 数据分析公司 - 自动抓取数据、生成报告、发送邮件，替代初级分析师；4) SaaS 公司客户成功 - 自动监控用户行为、触发干预、发送个性化邮件。Paperclip 的编排能力允许定义复杂的工作流：条件分支、循环、人工审核节点、异常处理等。这对于传统自动化工具（如 Zapier、Make）形成冲击，因为 Paperclip 内置了 LLM 能力，可以处理非结构化数据和模糊指令。建议企业从单一流程试点开始，逐步建立对 AI 员工的信任，同时保留人工监督机制。
                 </div>
+                <div class="expand-btn">📖 展开应用场景</div>
             </div>
 
-            <div class="article-card medium">
+            <div class="article-card solution">
                 <div class="article-header">
-                    <h3 class="article-title">Google Workspace CLI 发布：AI Agent 技能内置</h3>
-                    <span class="confidence medium">置信度 80%</span>
-                </div>
-                <div class="article-meta">
-                    <span>📰 来源: GitHub/GoogleWorkspace</span>
-                    <span>⭐ Stars: 17,187</span>
-                    <span>🏷️ 标签: <span class="tag">Google</span><span class="tag">企业工具</span></span>
+                    <h3 class="article-title">Google Workspace CLI：AI Agent 技能内置</h3>
+                    <div class="article-meta">
+                        <span>🎯 80%</span>
+                        <span>📰 GitHub</span>
+                    </div>
                 </div>
                 <div class="article-summary">
-                    Google 发布官方 Workspace CLI，动态构建自 Discovery Service，内置 AI Agent 技能。统一命令行工具管理 Drive、Gmail、Calendar 等。
+                    <span class="tag">AI</span><span class="tag">办公</span>
+                    Google 发布官方 Workspace CLI，动态构建自 Discovery Service，内置 AI Agent 技能。
                 </div>
                 <div class="article-detail">
-                    <strong>影响分析：</strong>企业级 AI Agent 与办公套件深度整合；微软 Copilot 面临直接竞争。CLI + AI 组合提升开发者效率。
+                    <strong>应用场景：</strong>Google Workspace CLI 是企业级 AI Agent 与办公套件深度整合的标杆产品，典型应用场景包括：1) 智能邮件处理 - Agent 自动分类邮件、起草回复、安排会议，解放员工时间；2) 文档协作 - 多人编辑时 Agent 自动检查冲突、建议修改、生成摘要；3) 数据分析 - 直接从 Sheets 读取数据，生成图表和洞察，无需切换工具；4) 项目管理 - 与 Calendar、Tasks 整合，自动追踪进度、提醒截止日期、协调资源。CLI 形式的设计使其易于集成到现有 DevOps 流程，开发者可以用脚本批量操作 Workspace 资源。这对于微软 Copilot 形成直接竞争，企业可能面临"选边站"的决策。建议已使用 Google Workspace 的企业优先评估，关注其权限管理和审计日志功能，确保符合合规要求。
                 </div>
+                <div class="expand-btn">📖 展开应用场景</div>
             </div>
 
-            <div class="article-card medium">
+            <div class="article-card solution">
                 <div class="article-header">
-                    <h3 class="article-title">ZeroClaw Labs 发布 Zeroclaw：Rust 版 AI 助手基础设施</h3>
-                    <span class="confidence medium">置信度 80%</span>
-                </div>
-                <div class="article-meta">
-                    <span>📰 来源: GitHub</span>
-                    <span>⭐ Stars: 25,275</span>
-                    <span>🏷️ 标签: <span class="tag">Rust</span><span class="tag">基础设施</span></span>
+                    <h3 class="article-title">Zeroclaw：Rust 版 AI 助手基础设施</h3>
+                    <div class="article-meta">
+                        <span>🎯 80%</span>
+                        <span>📰 GitHub</span>
+                    </div>
                 </div>
                 <div class="article-summary">
-                    Zeroclaw 获得 25K+ stars，定位为快速、小型、完全自主的 AI 助手基础设施。Rust 实现，可随处部署。
+                    <span class="tag">Rust</span><span class="tag">AI</span>
+                    Zeroclaw 获得 25K+ stars，定位为快速、小型、完全自主的 AI 助手基础设施。
                 </div>
                 <div class="article-detail">
-                    <strong>影响分析：</strong>Rust + AI Agent 组合崛起；对 Python 主导的 AI 生态形成补充。性能和资源效率成为新竞争维度。
+                    <strong>应用场景：</strong>Zeroclaw 是 Rust 进入 AI 基础设施领域的标志性项目，典型应用场景包括：1) 高性能 Agent 服务 - 需要处理数千并发连接的客服系统，Rust 的零成本抽象和内存安全可提供稳定低延迟服务；2) 边缘设备部署 - 资源受限环境（如 IoT 设备、路由器）上运行轻量级 AI Agent；3) 金融交易系统 - 对延迟和稳定性要求极高的场景，Rust 的确定性性能优于 Python；4) 安全敏感应用 - 内存安全特性避免缓冲区溢出等常见漏洞，适合处理敏感数据。Zeroclaw 的定位是"快速、小型、完全自主"，与 Python 生态（LangChain、LlamaIndex）形成互补而非替代。对于 Rust 开发者，这是参与 AI 浪潮的入口；对于 Python 开发者，这是性能瓶颈时的优化选项。建议关注其与现有 LLM 提供商的集成程度（OpenAI、Anthropic、本地模型）以及社区生态建设。
                 </div>
+                <div class="expand-btn">📖 展开应用场景</div>
             </div>
+
+            <div class="article-card solution">
+                <div class="article-header">
+                    <h3 class="article-title">Sipeed PicoClaw：微型自动化工具</h3>
+                    <div class="article-meta">
+                        <span>🎯 80%</span>
+                        <span>📰 GitHub</span>
+                    </div>
+                </div>
+                <div class="article-summary">
+                    <span class="tag">AI</span><span class="tag">嵌入式</span>
+                    微型、快速、随处部署的自动化工具，23K+ stars。
+                </div>
+                <div class="article-detail">
+                    <strong>应用场景：</strong>PicoClaw 是"微型化"AI 自动化的代表，典型应用场景包括：1) 嵌入式设备 - 在树莓派、ESP32 等资源受限设备上运行轻量级 Agent；2) 离线环境 - 无网络连接时的本地任务自动化（如工厂内网、野外设备）；3) 快速原型 - 开发者可在几分钟内搭建自动化流程，验证想法后再迁移到生产环境；4) 教育场景 - 学生学习 AI Agent 原理的低门槛工具，代码量少易于理解。PicoClaw 的"随处部署"特性使其适合边缘计算场景，与云端重型 Agent 形成互补。建议关注其与硬件的整合能力（GPIO 控制、传感器读取）以及模型压缩技术（如何在有限内存中运行 LLM）。对于 IoT 开发者，这可能是下一代智能设备的软件基础。
+                </div>
+                <div class="expand-btn">📖 展开应用场景</div>
+            </div>
+
         </section>
-
-        <!-- 早期苗头 -->
-        <section class="section" id="early-section">
+        <!-- 行业深挖 -->
+        <section class="section" id="industry-section">
             <div class="section-header">
-                <span class="section-icon">🟢</span>
+                <span class="section-icon">🏭</span>
                 <div>
-                    <h2 class="section-title early">早期苗头</h2>
-                    <p class="section-desc">GitHub Trending 新星与技术趋势</p>
+                    <h2 class="section-title industry">行业深挖</h2>
+                    <p class="section-desc">产业链深度分析，投资风向与竞争格局</p>
                 </div>
             </div>
-
-            <div class="article-card low">
+            
+            <div class="article-card industry">
                 <div class="article-header">
-                    <h3 class="article-title">Sipeed PicoClaw</h3>
-                    <span class="confidence low">置信度 75%</span>
-                </div>
-                <div class="article-meta">
-                    <span>⭐ Stars: 23,258</span>
-                    <span>🏷️ 标签: <span class="tag">嵌入式</span><span class="tag">AI</span></span>
+                    <h3 class="article-title">AI Agent 框架进入巨头混战阶段</h3>
+                    <div class="article-meta">
+                        <span>🎯 90%</span>
+                        <span>📰 行业分析</span>
+                    </div>
                 </div>
                 <div class="article-summary">
-                    微型、快速、随处部署的自动化工具。适合边缘设备上的 AI 应用部署。
+                    <span class="tag">AI</span><span class="tag">框架</span>
+                    OpenAI Symphony 和 Google ADK-JS 同日发布，AI Agent 框架竞争白热化。
                 </div>
+                <div class="article-detail">
+                    <strong>投资逻辑：</strong>OpenAI Symphony 和 Google ADK-JS 的同日发布，标志着 AI Agent 框架进入"巨头混战"阶段。这一竞争格局对投资者意味着机会与风险并存：机会在于市场教育成本降低，大厂投入将加速企业采用；风险在于初创企业可能面临"碾压式"竞争。从投资角度，应关注以下维度：1) 差异化定位 - 初创企业是否找到了大厂忽视的细分市场（如垂直行业、特定技术栈）；2) 社区粘性 - GitHub stars 增长、Discord 活跃度、贡献者数量；3) 商业化速度 - 是否已有付费客户、ARR 增长情况；4) 技术壁垒 - 核心算法是否难以复制。建议重点关注 TypeScript 生态（Mastra、Vercel AI SDK）和 Rust 生态（Zeroclaw），这些技术栈的开发者忠诚度高，可能形成稳定的用户基础。避免投资同质化严重的"又一个 Agent 框架"，除非有明确的创新点。
+                </div>
+                <div class="expand-btn">📖 展开投资逻辑</div>
             </div>
 
-            <div class="article-card low">
+            <div class="article-card industry">
                 <div class="article-header">
-                    <h3 class="article-title">OpenFang - 开源 Agent 操作系统</h3>
-                    <span class="confidence low">置信度 75%</span>
-                </div>
-                <div class="article-meta">
-                    <span>⭐ Stars: 13,221</span>
-                    <span>🏷️ 标签: <span class="tag">Agent OS</span><span class="tag">开源</span></span>
+                    <h3 class="article-title">去中心化社交赛道格局重塑</h3>
+                    <div class="article-meta">
+                        <span>🎯 85%</span>
+                        <span>📰 行业分析</span>
+                    </div>
                 </div>
                 <div class="article-summary">
-                    开源 Agent 操作系统，为 AI 代理提供底层运行环境。Agent 从应用层向系统层演进。
+                    <span class="tag">社交</span><span class="tag">去中心化</span>
+                    Bluesky CEO 卸任事件揭示了去中心化社交的核心困境。
                 </div>
+                <div class="article-detail">
+                    <strong>投资逻辑：</strong>Bluesky CEO 卸任事件揭示了去中心化社交的核心困境：理想主义与商业现实的冲突。对于投资者，这一赛道需要重新评估：1) 技术叙事 vs 用户价值 - 去中心化是手段而非目的，用户真正关心的是内容质量和社交体验；2) 治理结构风险 - 缺乏中心化决策可能导致发展迟缓、方向混乱；3) 变现路径不清晰 - 去中心化协议如何产生可持续收入仍是难题。建议观望而非激进布局，关注以下信号：Bluesky 继任者任命、核心团队稳定性、用户增长趋势、开发者生态活跃度。Mastodon 等竞品可能迎来窗口期，但同样需要解决"小众工具"的规模化问题。长期来看，去中心化社交可能以"协议层去中心化 + 应用层中心化"的混合形态存在，纯去中心化模式可能局限于特定人群（开发者、隐私极客）。
+                </div>
+                <div class="expand-btn">📖 展开投资逻辑</div>
             </div>
 
-            <div class="article-card low">
+            <div class="article-card industry">
                 <div class="article-header">
-                    <h3 class="article-title">ClawWork - OpenClaw 作为你的 AI 同事</h3>
-                    <span class="confidence low">置信度 70%</span>
-                </div>
-                <div class="article-meta">
-                    <span>⭐ Stars: 6,921</span>
-                    <span>💰 11小时赚取 $15K</span>
-                    <span>🏷️ 标签: <span class="tag">OpenClaw</span><span class="tag">变现</span></span>
+                    <h3 class="article-title">AI 硬件隐私监管压力加大</h3>
+                    <div class="article-meta">
+                        <span>🎯 85%</span>
+                        <span>📰 行业分析</span>
+                    </div>
                 </div>
                 <div class="article-summary">
-                    展示 OpenClaw 作为 AI 同事的实际工作能力，11 小时内完成 $15K 价值的任务。
+                    <span class="tag">硬件</span><span class="tag">隐私</span>
+                    Ray-Ban Meta 隐私丑闻引发对 AI 硬件的严格审视。
                 </div>
+                <div class="article-detail">
+                    <strong>投资逻辑：</strong>Ray-Ban Meta 隐私丑闻是 AI 硬件投资的重大风险提示。这一事件表明，隐私合规已从"可选项"变为"生死线"，监管机构和消费者都不会容忍数据滥用。对于 AI 硬件赛道，投资者应重新评估：1) 技术可行性 vs 社会接受度 - 即使技术先进，如果侵犯隐私也难以商业化；2) 合规成本 - 数据治理、人工审核、用户知情权保障将显著增加运营成本；3) 竞争格局变化 - 强调隐私保护的品牌（如 Apple）可能获得差异化优势。建议关注以下方向：端侧 AI 处理（本地计算而非云端传输）、隐私计算技术（联邦学习、差分隐私）、透明的数据使用政策。避免投资依赖"数据收割"商业模式的硬件产品，监管风险过高。长期来看，隐私保护能力将成为 AI 硬件的核心竞争力，而非附加功能。
+                </div>
+                <div class="expand-btn">📖 展开投资逻辑</div>
             </div>
 
-            <div class="article-card low">
-                <div class="article-header">
-                    <h3 class="article-title">Edict - 三省六部制多代理编排系统</h3>
-                    <span class="confidence low">置信度 70%</span>
-                </div>
-                <div class="article-meta">
-                    <span>⭐ Stars: 6,693</span>
-                    <span>🏷️ 标签: <span class="tag">多代理</span><span class="tag">编排</span></span>
-                </div>
-                <div class="article-summary">
-                    借鉴中国古代官制的多代理编排系统，9 个专业 AI 代理协同工作，带实时仪表板和审计追踪。
-                </div>
-            </div>
-
-            <div class="article-detail" style="margin-top: 20px;">
-                <strong>趋势洞察：</strong><br>
-                • <strong>Agent 操作系统化：</strong>从工具到 OS 的演进趋势明显，OpenFang 等项目的出现标志着 Agent 正在获得系统级能力。<br>
-                • <strong>多代理编排：</strong>复杂任务需要多 Agent 协作，编排层成为新战场。Edict 的"三省六部制"设计体现了对组织架构的借鉴。<br>
-                • <strong>Rust 崛起：</strong>AI 基础设施开始拥抱 Rust 的性能优势，Zeroclaw、IronClaw 等项目引领这一趋势。<br>
-                • <strong>本地化优先：</strong>screenpipe 等"本地优先"AI 工具获得关注，隐私和自主可控成为新卖点。
-            </div>
         </section>
+        <!-- 投资风险 -->
+        <section class="section" id="risk-section">
+            <div class="section-header">
+                <span class="section-icon">⚠️</span>
+                <div>
+                    <h2 class="section-title risk">投资风险</h2>
+                    <p class="section-desc">潜在风险与警示，理性看待 AI 热潮</p>
+                </div>
+            </div>
+            
+            <div class="article-card risk">
+                <div class="article-header">
+                    <h3 class="article-title">AI Agent 自主执行的安全与责任风险</h3>
+                    <div class="article-meta">
+                        <span>🎯 90%</span>
+                        <span>📰 风险分析</span>
+                    </div>
+                </div>
+                <div class="article-summary">
+                    <span class="tag">AI</span><span class="tag">安全</span>
+                    Symphony 等自主执行框架带来了新的安全与责任风险。
+                </div>
+                <div class="article-detail">
+                    <strong>风险提示：</strong>Symphony 等自主执行框架带来了新的安全与责任风险，投资者需要警惕：1) 代码质量不可控 - AI 生成的代码可能存在隐藏 bug 或安全漏洞，传统代码审查流程难以应对；2) 责任归属模糊 - 当 AI 生成的代码导致生产事故时，责任在开发者、框架提供商还是企业自身？3) 供应链攻击 - 恶意 prompt 可能诱导 AI 引入后门或依赖项漏洞；4) 知识产权风险 - AI 可能复制受版权保护的代码片段，引发法律纠纷。建议企业在采用自主执行框架时，建立完善的治理机制：强制代码审查、自动化安全扫描、回滚能力、责任保险。投资者应评估目标企业的风险管控能力，包括是否有专门的 AI 安全团队、是否建立了异常检测机制、是否有应急响应预案。避免投资盲目追求"全自动化"而忽视安全的企业。
+                </div>
+                <div class="expand-btn">📖 展开风险提示</div>
+            </div>
 
-        <!-- 数据看板 -->
+            <div class="article-card risk">
+                <div class="article-header">
+                    <h3 class="article-title">去中心化社交平台治理风险</h3>
+                    <div class="article-meta">
+                        <span>🎯 85%</span>
+                        <span>📰 风险分析</span>
+                    </div>
+                </div>
+                <div class="article-summary">
+                    <span class="tag">社交</span><span class="tag">治理</span>
+                    Bluesky CEO 卸任暴露了去中心化社交平台的治理风险。
+                </div>
+                <div class="article-detail">
+                    <strong>风险提示：</strong>Bluesky CEO 卸任暴露了去中心化社交平台的治理风险，投资者需要关注：1) 决策效率低下 - 缺乏中心化决策可能导致产品迭代缓慢，错失市场窗口；2) 方向分歧 - 社区成员可能对发展路径有不同看法，导致内耗甚至分叉；3) 资金可持续性 - 去中心化项目往往依赖捐赠或基金会支持，商业模式不清晰；4) 监管合规 - 去中心化不等于无法律责任，内容审核、数据保护仍需合规。建议对去中心化社交赛道的投资保持谨慎，关注以下指标：核心团队稳定性、资金储备、用户增长质量（非机器人）、开发者生态活跃度。避免投资仅靠"去中心化叙事"而缺乏实际用户价值的产品。长期来看，成功的去中心化社交产品需要找到理想主义与商业现实的平衡点。
+                </div>
+                <div class="expand-btn">📖 展开风险提示</div>
+            </div>
+
+            <div class="article-card risk">
+                <div class="article-header">
+                    <h3 class="article-title">AI 硬件隐私合规风险</h3>
+                    <div class="article-meta">
+                        <span>🎯 85%</span>
+                        <span>📰 风险分析</span>
+                    </div>
+                </div>
+                <div class="article-summary">
+                    <span class="tag">硬件</span><span class="tag">隐私</span>
+                    Ray-Ban Meta 隐私丑闻是 AI 硬件投资的重大合规风险信号。
+                </div>
+                <div class="article-detail">
+                    <strong>风险提示：</strong>Ray-Ban Meta 隐私丑闻是 AI 硬件投资的重大合规风险信号，投资者应警惕：1) 监管处罚 - 欧盟 GDPR、美国州级隐私法可能处以巨额罚款（最高全球营收 4%）；2) 集体诉讼 - 用户可能发起集体诉讼，索赔精神损失和数据泄露赔偿；3) 品牌损害 - 隐私丑闻对品牌形象的损害可能持续数年，影响产品销售；4) 产品召回 - 严重违规可能导致产品下架或召回。建议投资前进行严格的合规尽调：数据收集范围是否最小化、是否获得明确用户同意、人工审核流程是否合规、数据保留期限是否合理。关注企业的隐私官（DPO）设置、合规审计报告、用户投诉处理机制。避免投资"先上车后补票"的产品，监管环境已不允许。长期来看，隐私保护应成为产品设计的核心原则（Privacy by Design），而非事后补丁。
+                </div>
+                <div class="expand-btn">📖 展开风险提示</div>
+            </div>
+
+        </section>
+        <!-- 科技数据 -->
         <section class="section" id="data-section">
             <div class="section-header">
                 <span class="section-icon">📊</span>
                 <div>
-                    <h2 class="section-title data">数据看板</h2>
-                    <p class="section-desc">关键指标与趋势量化</p>
+                    <h2 class="section-title data">科技数据</h2>
+                    <p class="section-desc">关键指标一目了然，用数据看懂趋势</p>
                 </div>
             </div>
 
             <div class="data-grid">
                 <div class="data-card">
-                    <div class="data-value">15+</div>
-                    <div class="data-label">AI Agent 相关新仓库</div>
-                    <div class="data-trend">⬆️ 激增</div>
-                </div>
-                <div class="data-card">
-                    <div class="data-value">8</div>
-                    <div class="data-label">OpenClaw 生态项目进 Trending</div>
-                    <div class="data-trend">⬆️ 爆发</div>
-                </div>
-                <div class="data-card">
-                    <div class="data-value">22K</div>
-                    <div class="data-label">Vercel AI SDK Stars</div>
-                    <div class="data-trend">⬆️ 稳定</div>
-                </div>
-                <div class="data-card">
-                    <div class="data-value">2</div>
-                    <div class="data-label">大厂同日发布 Agent 框架</div>
-                    <div class="data-trend">⬆️ 加速</div>
-                </div>
-                <div class="data-card">
-                    <div class="data-value">1</div>
-                    <div class="data-label">重大隐私争议事件</div>
-                    <div class="data-trend down">⚠️ 关注</div>
-                </div>
+                <div class="data-value">15+</div>
+                <div class="data-label">AI Agent 相关新仓库</div>
+                <div class="data-trend">↑ 激增</div>
+            </div>
+            <div class="data-card">
+                <div class="data-value">8</div>
+                <div class="data-label">OpenClaw 生态项目</div>
+                <div class="data-trend">↑ 爆发</div>
+            </div>
+            <div class="data-card">
+                <div class="data-value">21K</div>
+                <div class="data-label">Mastra GitHub Stars</div>
+                <div class="data-trend">↑ 稳定</div>
+            </div>
+            <div class="data-card">
+                <div class="data-value">2</div>
+                <div class="data-label">大厂 Agent 同日发布</div>
+                <div class="data-trend">↑ 加速</div>
+            </div>
+            <div class="data-card">
+                <div class="data-value">1</div>
+                <div class="data-label">重大隐私争议事件</div>
+                <div class="data-trend">⚠️ 关注</div>
+            </div>
             </div>
         </section>
-
         <!-- 冷幽默 -->
         <section class="section" id="humor-section">
             <div class="section-header">
                 <span class="section-icon">❄️</span>
                 <div>
-                    <h2 class="section-title humor">冷幽默预警</h2>
-                    <p class="section-desc">科技圈的幽默与讽刺</p>
+                    <h2 class="section-title humor">冷幽默</h2>
+                    <p class="section-desc">科技圈的幽默与讽刺，轻松一下</p>
+                </div>
+            </div>
+            
+            <div class="humor-card">
+                <div class="humor-text">
+                    <span class="humor-emoji">🎭</span>
+                    Bluesky 的 CEO 突然宣布离职，员工问："我们这不是去中心化平台吗？怎么中心人物先走了？"
                 </div>
             </div>
 
             <div class="humor-card">
                 <div class="humor-text">
-                    <span class="humor-emoji">🤖</span> 现在的程序员：昨天写代码，今天写 prompt，明天可能就要给 AI Agent 写 KPI 了
+                    <span class="humor-emoji">🤖</span>
+                    OpenAI 和 Google 同一天发布 Agent 框架。开发者："你们商量好的吧？"OpenAI："我们是 Symphony。"Google："我们有 ADK。"开发者："我是 ADHD，不知道该选哪个。"
                 </div>
             </div>
 
             <div class="humor-card">
                 <div class="humor-text">
-                    <span class="humor-emoji">🕶️</span> Ray-Ban Meta：我们不只是眼镜，还是你的随身纪录片导演——只是没想到观众包括外包工人
+                    <span class="humor-emoji">🕶️</span>
+                    Meta 说智能眼镜让你"活在当下"。外包工人："我们是活在你的当下。"
                 </div>
             </div>
 
-            <div class="humor-card">
-                <div class="humor-text">
-                    <span class="humor-emoji">🏢</span> Paperclip 承诺"零人力公司"，但 debug 的时候你会发现人力还是需要的——只是换成了你在 debug AI
-                </div>
-            </div>
-
-            <div class="humor-card">
-                <div class="humor-text">
-                    <span class="humor-emoji">🦀</span> Rust 程序员终于等到了他们的 AI 时代：Zeroclaw 证明你可以同时拥有内存安全和存在主义焦虑
-                </div>
-            </div>
         </section>
-
+        <!-- 底部 -->
         <footer class="footer">
-            <p>📱 数据源：GitHub Trending, HackerNews, 开源社区</p>
+            <p>📱 数据源：SearXNG 聚合搜索 + TechCrunch + arXiv + GitHub Trending + MIT News</p>
             <p>🔒 置信度说明：90%+=官方/主流媒体确认 | 75-89%=多源交叉验证 | <75%=单一来源/待验证</p>
-            <p style="margin-top: 20px;">Generated by OpenClaw AI | 每日科技简报</p>
+            <p style="margin-top: 20px;">Generated by 元芳&虾皮 AI | <a href="#">查看历史期刊</a> | <a href="#">订阅每日推送</a></p>
         </footer>
     </div>
 
     <script>
+        // 可用的日期列表（动态加载）
+        let AVAILABLE_DATES = [];
+        let datesLoaded = false;
+        
+        // 从 JSON 文件加载可用日期
+        async function loadAvailableDates() {
+            try {
+                const response = await fetch('available-dates.json');
+                const data = await response.json();
+                AVAILABLE_DATES = data.dates || [];
+                datesLoaded = true;
+                console.log('已加载日期列表:', AVAILABLE_DATES.length, '个日期');
+            } catch (error) {
+                console.error('加载日期列表失败:', error);
+                AVAILABLE_DATES = [];
+            }
+        }
+        
+        // 当前页面日期（从 URL 或页面内容提取）
+        let currentPageDate = null;
+        
+        // 当前选中的年月
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth();
+        
+        // 提取当前页面日期
+        function extractCurrentPageDate() {
+            // 从 URL 提取（digest-YYYYMMDD.html）
+            const urlMatch = window.location.href.match(/digest-(\d{4})(\d{2})(\d{2})\.html/);
+            if (urlMatch) {
+                return {
+                    year: parseInt(urlMatch[1]),
+                    month: parseInt(urlMatch[2]) - 1,
+                    day: parseInt(urlMatch[3]),
+                    dateStr: urlMatch[1] + urlMatch[2] + urlMatch[3]
+                };
+            }
+            return null;
+        }
+        
         // 创建背景粒子
         function createParticles() {
             const container = document.getElementById('particles');
             const particleCount = 50;
+
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
@@ -775,6 +1400,152 @@
                 particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
                 container.appendChild(particle);
             }
+        }
+        
+        // 生成日历
+        function generateCalendar(year, month) {
+            const grid = document.getElementById('calendar-grid');
+            const monthTitle = document.getElementById('calendar-month');
+            const today = new Date();
+            
+            // 更新月份标题
+            monthTitle.textContent = `${year}年${month + 1}月`;
+            
+            // 清空网格
+            grid.innerHTML = '';
+            
+            // 添加星期标题
+            const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+            weekdays.forEach(day => {
+                const div = document.createElement('div');
+                div.className = 'calendar-weekday';
+                div.textContent = day;
+                grid.appendChild(div);
+            });
+            
+            // 获取当月第一天和最后一天
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startDay = firstDay.getDay(); // 0-6 (周日 - 周六)
+            const totalDays = lastDay.getDate();
+            
+            // 添加空白单元格（第一天之前的）
+            for (let i = 0; i < startDay; i++) {
+                const div = document.createElement('div');
+                div.className = 'calendar-day empty';
+                grid.appendChild(div);
+            }
+            
+            // 添加日期
+            for (let day = 1; day <= totalDays; day++) {
+                const div = document.createElement('div');
+                div.className = 'calendar-day';
+                div.textContent = day;
+                
+                // 格式化日期为 YYYYMMDD
+                const dateStr = `${year}${String(month + 1).padStart(2, '0')}${String(day).padStart(2, '0')}`;
+                
+                // 检查是否是当前页面日期（高亮显示）
+                if (currentPageDate && dateStr === currentPageDate.dateStr) {
+                    div.classList.add('current-page');
+                    div.title = `当前页面：${year}-${month + 1}-${day}`;
+                }
+                
+                // 检查是否是今天（特殊标识）
+                if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+                    div.classList.add('today');
+                    div.title = `今天：${year}-${month + 1}-${day}`;
+                }
+                
+                // 检查是否有内容
+                if (AVAILABLE_DATES.includes(dateStr)) {
+                    div.classList.add('has-content');
+                    if (!div.classList.contains('current-page')) {
+                        div.title = `查看 ${year}-${month + 1}-${day} 的资讯`;
+                    }
+                    div.onclick = () => {
+                        window.location.href = `digest-${dateStr}.html`;
+                    };
+                } else {
+                    div.classList.add('disabled');
+                    if (!div.title) {
+                        div.title = '暂无资讯';
+                    }
+                }
+                
+                grid.appendChild(div);
+            }
+        }
+        
+        // 初始化日历
+        async function initCalendar() {
+            // 先加载日期列表
+            await loadAvailableDates();
+            
+            // 提取当前页面日期
+            currentPageDate = extractCurrentPageDate();
+            
+            // 如果有当前页面日期，从该日期开始显示
+            if (currentPageDate) {
+                currentYear = currentPageDate.year;
+                currentMonth = currentPageDate.month;
+            }
+            
+            const prevBtn = document.getElementById('prev-month');
+            const nextBtn = document.getElementById('next-month');
+            const todayBtn = document.getElementById('today-btn');
+            
+            prevBtn.onclick = () => {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                generateCalendar(currentYear, currentMonth);
+            };
+            
+            nextBtn.onclick = () => {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                generateCalendar(currentYear, currentMonth);
+            };
+            
+            todayBtn.onclick = () => {
+                const today = new Date();
+                currentYear = today.getFullYear();
+                currentMonth = today.getMonth();
+                const todayDate = today.getDate();
+                
+                // 重新生成日历
+                generateCalendar(currentYear, currentMonth);
+                
+                // 延迟一下，等待 DOM 更新后滚动到今天
+                setTimeout(() => {
+                    const grid = document.getElementById('calendar-grid');
+                    const days = grid.querySelectorAll('.calendar-day');
+                    
+                    // 找到今天的日期单元格
+                    days.forEach(day => {
+                        if (day.textContent == todayDate && day.classList.contains('has-content')) {
+                            day.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            day.style.transform = 'scale(1.3)';
+                            day.style.zIndex = '10';
+                            
+                            // 1 秒后恢复
+                            setTimeout(() => {
+                                day.style.transform = '';
+                                day.style.zIndex = '';
+                            }, 1000);
+                        }
+                    });
+                }, 100);
+            };
+            
+            // 生成初始日历
+            generateCalendar(currentYear, currentMonth);
         }
 
         // 滚动进度条
@@ -786,6 +1557,42 @@
             progressBar.style.width = scrollPercent + '%';
         }
 
+        // 滚动动画
+        function handleScrollAnimation() {
+            const sections = document.querySelectorAll('.section');
+            
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                const triggerPoint = window.innerHeight * 0.8;
+                
+                if (rect.top < triggerPoint) {
+                    section.classList.add('visible');
+                }
+            });
+        }
+
+        // 文章卡片展开
+        function initExpandCards() {
+            document.querySelectorAll('.expand-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const card = this.closest('.article-card');
+                    card.classList.toggle('expanded');
+                    this.textContent = card.classList.contains('expanded') ? '📕 收起' : '📖 展开深度解读';
+                });
+            });
+
+            document.querySelectorAll('.article-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('expanded');
+                    const btn = this.querySelector('.expand-btn');
+                    if (btn) {
+                        btn.textContent = this.classList.contains('expanded') ? '📕 收起' : '📖 展开深度解读';
+                    }
+                });
+            });
+        }
+
         // 导航标签切换
         function initNavTabs() {
             document.querySelectorAll('.nav-tab').forEach(tab => {
@@ -795,25 +1602,82 @@
 
                     const section = this.dataset.section;
                     document.querySelectorAll('.section').forEach(sec => {
-                        if (section === 'all') {
+                        if (section === 'all' || sec.id === section + '-section') {
                             sec.style.display = 'block';
-                        } else if (sec.id === section + '-section') {
-                            sec.style.display = 'block';
-                            sec.scrollIntoView({ behavior: 'smooth' });
+                            setTimeout(() => sec.classList.add('visible'), 100);
                         } else {
                             sec.style.display = 'none';
+                            sec.classList.remove('visible');
                         }
                     });
                 });
             });
         }
 
+        // 日历模态框控制
+        function openCalendar() {
+            document.getElementById('calendar-modal').classList.add('show');
+            document.body.style.overflow = 'hidden'; // 防止背景滚动
+        }
+        
+        function closeCalendar() {
+            document.getElementById('calendar-modal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+        
+        // 点击模态框背景关闭
+        document.getElementById('calendar-modal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCalendar();
+            }
+        });
+        
+        // ESC 键关闭
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeCalendar();
+            }
+        });
+        
+        // 初始化
         document.addEventListener('DOMContentLoaded', () => {
             createParticles();
+            initCalendar();
+            initExpandCards();
             initNavTabs();
+            handleScrollAnimation();
         });
 
-        window.addEventListener('scroll', updateProgressBar);
+        // 滚动事件
+        window.addEventListener('scroll', () => {
+            updateProgressBar();
+            handleScrollAnimation();
+        });
+
+        
+        // 微信二维码切换
+        function toggleWechatCard() {
+            const card = document.getElementById('wechatCard');
+            card.classList.toggle('collapsed');
+            const btn = document.querySelector('.wechat-toggle');
+            btn.textContent = card.classList.contains('collapsed') ? '📱' : '✕ 收起';
+        }
+
     </script>
+
+    
+    <!-- 微信二维码浮窗 -->
+    <div class="wechat-float">
+        <div class="wechat-card collapsed" id="wechatCard">
+            <button class="wechat-toggle" onclick="toggleWechatCard()">📱</button>
+            <div class="qr-image">
+                <img src="wechat-qr.jpg" alt="微信公众号二维码">
+            </div>
+            <div class="qr-text">
+                如需定制其他资讯或探讨 AI 应用，请关注公众号
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
