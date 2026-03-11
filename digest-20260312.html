@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科技芯声 | 2026-03-12</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; background: linear-gradient(135deg, #0c0c1e 0%, #1a1a3e 50%, #0f0f2d 100%); min-height: 100vh; color: #e0e0ff; overflow-x: hidden; line-height: 1.6; }
+        .grid-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px); background-size: 50px 50px; pointer-events: none; z-index: 0; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 1; }
+        .masthead { text-align: center; margin-bottom: 60px; padding: 40px 20px; background: rgba(255, 255, 255, 0.03); border-radius: 16px; backdrop-filter: blur(10px); }
+        .brand { font-size: 56px; font-weight: bold; background: linear-gradient(90deg, #00d4ff, #7b2ff7, #00d4ff); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: gradient 3s ease infinite; margin-bottom: 10px; }
+        @keyframes gradient { 0%, 100% { background-position: 0% center; } 50% { background-position: 100% center; } }
+        .subtitle { font-size: 18px; color: #8888aa; letter-spacing: 3px; text-transform: uppercase; }
+        .meta-info { display: flex; justify-content: center; gap: 30px; margin-top: 25px; flex-wrap: wrap; }
+        .meta-item { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #00d4ff; }
+        .date-display { display: inline-flex; align-items: center; gap: 6px; background: rgba(0, 212, 255, 0.15); padding: 6px 14px; border-radius: 16px; cursor: pointer; }
+        .date-display-text { color: #00d4ff; font-size: 14px; }
+        
+        /* 区块样式 */
+        .section { background: rgba(255, 255, 255, 0.03); border-radius: 16px; padding: 30px; margin-bottom: 30px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .section-icon { font-size: 28px; }
+        .section-title { font-size: 24px; font-weight: bold; }
+        
+        /* 高优先级 - 红色 */
+        .priority-high .section-title { color: #ff6b6b; }
+        .priority-high .news-item { border-left: 3px solid #ff6b6b; background: linear-gradient(90deg, rgba(255, 107, 107, 0.1) 0%, transparent 100%); }
+        
+        /* 中优先级 - 黄色 */
+        .priority-medium .section-title { color: #ffd93d; }
+        .priority-medium .news-item { border-left: 3px solid #ffd93d; background: linear-gradient(90deg, rgba(255, 217, 61, 0.1) 0%, transparent 100%); }
+        
+        /* 低优先级 - 绿色 */
+        .priority-low .section-title { color: #6bcb77; }
+        .priority-low .news-item { border-left: 3px solid #6bcb77; background: linear-gradient(90deg, rgba(107, 203, 119, 0.1) 0%, transparent 100%); }
+        
+        /* 数据看板 */
+        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .stat-card { background: rgba(0, 212, 255, 0.1); border-radius: 12px; padding: 20px; text-align: center; border: 1px solid rgba(0, 212, 255, 0.2); }
+        .stat-value { font-size: 36px; font-weight: bold; color: #00d4ff; }
+        .stat-label { font-size: 14px; color: #8888aa; margin-top: 5px; }
+        
+        /* 新闻条目 */
+        .news-item { padding: 20px; margin-bottom: 15px; border-radius: 8px; transition: all 0.3s ease; }
+        .news-item:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); }
+        .news-title { font-size: 18px; font-weight: bold; margin-bottom: 8px; }
+        .news-title a { color: inherit; text-decoration: none; }
+        .news-title a:hover { color: #00d4ff; }
+        .news-meta { display: flex; gap: 20px; font-size: 13px; color: #8888aa; flex-wrap: wrap; }
+        .news-meta span { display: flex; align-items: center; gap: 5px; }
+        .confidence { padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .confidence-high { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
+        .confidence-medium { background: rgba(255, 217, 61, 0.2); color: #ffd93d; }
+        .confidence-low { background: rgba(107, 203, 119, 0.2); color: #6bcb77; }
+        .news-summary { margin-top: 10px; font-size: 14px; color: #aaaacc; line-height: 1.6; }
+        
+        /* 冷幽默 */
+        .joke-section { background: linear-gradient(135deg, rgba(123, 47, 247, 0.2) 0%, rgba(0, 212, 255, 0.2) 100%); border: 1px solid rgba(123, 47, 247, 0.3); }
+        .joke-content { font-size: 16px; font-style: italic; color: #ccccee; text-align: center; padding: 20px; }
+        
+        /* 页脚 */
+        .footer { text-align: center; padding: 40px 20px; color: #666688; font-size: 14px; }
+        .footer a { color: #00d4ff; text-decoration: none; }
+        
+        @media (max-width: 768px) {
+            .brand { font-size: 36px; }
+            .section { padding: 20px; }
+            .meta-info { flex-direction: column; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+    <div class="container">
+        <header class="masthead">
+            <div class="brand">科技芯声</div>
+            <div class="subtitle">每日科技简报</div>
+            <div class="meta-info">
+                <div class="meta-item">
+                    <span>📅</span>
+                    <div class="date-display" onclick="location.href='index.html'">
+                        <span class="date-display-text">2026-03-12</span>
+                        <span class="date-picker-icon">📆</span>
+                    </div>
+                </div>
+                <div class="meta-item">
+                    <span>⏰</span>
+                    <span>07:30 更新</span>
+                </div>
+                <div class="meta-item">
+                    <span>📊</span>
+                    <span>12 条资讯</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 高优先级异动 -->
+        <section class="section priority-high">
+            <div class="section-header">
+                <span class="section-icon">🔴</span>
+                <h2 class="section-title">高优先级异动</h2>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://www.wiz.io/blog/google-closes-deal-to-acquire-wiz" target="_blank">Google 正式完成收购 Wiz 安全公司</a>
+                    <span class="confidence confidence-high">置信度: 高</span>
+                </div>
+                <div class="news-meta">
+                    <span>📍 来源: Wiz Blog</span>
+                    <span>🏷️ 标签: #云计算 #安全 #并购</span>
+                </div>
+                <div class="news-summary">
+                    Google 正式完成对 Wiz 的收购，这是近年来云安全领域最大的并购案之一。Wiz 是一家专注于云原生安全的初创公司，其平台可帮助企业识别和修复云环境中的安全风险。此举将加强 Google Cloud 在企业安全市场的竞争力。
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://github.com/microsoft/BitNet" target="_blank">Microsoft 发布 BitNet: 100B 参数 1-bit 大模型</a>
+                    <span class="confidence confidence-high">置信度: 高</span>
+                </div>
+                <div class="news-meta">
+                    <span>📍 来源: GitHub / Hacker News</span>
+                    <span>🏷️ 标签: #大模型 #LLM #微软</span>
+                </div>
+                <div class="news-summary">
+                    Microsoft 发布了 BitNet，一个突破性的 1000 亿参数 1-bit 大模型。该模型可在本地 CPU 上运行，极大降低了 AI 推理的硬件门槛。1-bit 量化技术将模型体积压缩至传统模型的 1/10，同时保持接近完整的性能表现。
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://www.perplexity.ai/personal-computer-waitlist" target="_blank">Perplexity 推出 Personal Computer AI 设备</a>
+                    <span class="confidence confidence-high">置信度: 高</span>
+                </div>
+                <div class="news-meta">
+                    <span>📍 来源: Perplexity AI / Hacker News</span>
+                    <span>🏷️ 标签: #AI硬件 #Perplexity #消费电子</span>
+                </div>
+                <div class="news-summary">
+                    Perplexity 推出其首款 AI 硬件设备 "Personal Computer"，正式加入 AI 硬件竞赛。该设备专为 AI 搜索和对话设计，定位为传统 PC 的 AI 替代品，目前开放 waitlist 注册。
+                </div>
+            </div>
+        </section>
+
+        <!-- 中优先级信号 -->
+        <section class="section priority-medium">
+            <div class="section-header">
+                <span class="section-icon">🟡</span>
+                <h2 class="section-title">中优先级信号</h2>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://metr.org/notes/2026-03-10-many-swe-bench-passing-prs-would-not-be-merged-into-main/" target="_blank">研究显示：多数 SWE-bench 通过的 PR 不会被合并</a>
+                    <span class="confidence confidence-medium">置信度: 中</span>
+                </div>
+                <div class="news-meta">
+                    <span>📍 来源: METR</span>
+                    <span>🏷️ 标签: #AI编程 #SWE-bench #评估</span>
+                </div>
+                <div class="news-summary">
+                    METR 最新研究揭示，多数在 SWE-bench 测试中通过的代码 PR 在实际开发中并不会被合并。这表明当前 AI 编程评估基准与真实开发场景存在显著差距，需要重新审视 AI 编码能力的评估标准。
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://bloomberg.github.io/js-blog/post/temporal/" target="_blank">Temporal: JavaScript 时间处理库的九年开发历程</a>
+                    <span class="confidence confidence-medium">置信度: 中</span>
+                </div>
+                <div class="news-meta">
+                    <span>📍 来源: Bloomberg / Hacker News</span>
+                    <span>🏷️ 标签: #JavaScript #开源 #时间处理</span>
+                </div>
+                <div class="news-summary">
+                    Bloomberg 工程师分享了 Temporal——新一代 JavaScript 时间处理库——长达九年的开发历程。Temporal 旨在解决原生 Date 对象的诸多缺陷，提供更强大、更安全的时间操作 API。
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://hacks.mozilla.org/2026/02/making-webassembly-a-first-class-language-on-the-web/" target="_blank">Mozilla 推动 WebAssembly 成为 Web 一等公民</a>
+                    <span class="confidence confidence-medium">置信度: 中</span>
+                </div>
+                <div class="news-meta">
+                    <span>📍 来源: Mozilla Hacks</span>
+                    <span>🏷️ 标签: #WebAssembly #Web #Mozilla</span>
+                </div>
+                <div class="news-summary">
+                    Mozilla 宣布将推动 WebAssembly 成为 Web 平台的一等公民，包括内置 GC 支持、DOM 集成等。这将使得更多高性能应用可以直接在浏览器中运行，进一步模糊原生应用与 Web 应用的边界。
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://codewall.ai/blog/how-we-hacked-mc kinseys-ai-platform" target="_blank">安全研究人员成功入侵 McKinsey AI 平台</a>
+                    <span class="confidence confidence-medium">置信度: 中</span>
+                </div>
+                <div class="news-meta">
+                    <span>📍 来源: CodeWall</span>
+                    <span>🏷️ 标签: #安全 #AI #渗透测试</span>
+                </div>
+                <div class="news-summary">
+                    安全研究人员公开了如何成功入侵 McKinsey AI 平台的过程，揭示了企业 AI 应用中存在的安全漏洞。此事件再次提醒企业需要加强 AI 系统的安全防护措施。
+                </div>
+            </div>
+        </section>
+
+        <!-- 早期苗头 -->
+        <section class="section priority-low">
+            <div class="section-header">
+                <span class="section-icon">🟢</span>
+                <h2 class="section-title">早期苗头 - GitHub Trending</h2>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://github.com/666ghj/MiroFish" target="_blank">MiroFish: 简洁通用的群体智能引擎</a>
+                    <span class="confidence confidence-low">置信度: 低</span>
+                </div>
+                <div class="news-meta">
+                    <span>📍 来源: GitHub Trending</span>
+                    <span>⭐ 8,983 stars 本周</span>
+                    <span>🏷️ 标签: #AI #群体智能</span>
+                </div>
+                <div class="news-summary">
+                    MiroFish 是一个简洁通用的群体智能引擎，可用于预测各类事件。作为新兴的 AI 方向，群体智能结合多个 AI 代理的协作能力，展现出超越单一模型的潜力。
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://github.com/virattt/ai-hedge-fund" target="_blank">AI Hedge Fund: AI 对冲基金团队</a>
+                    <span class="confidence confidence-low">置信度: 低</span>
+                </div>
+                <div class="news-meta">
+                    <span>📍 来源: GitHub Trending</span>
+                    <span>⭐ 1,399 stars 本周</span>
+                    <span>🏷️ 标签: #AI #金融</span>
+                </div>
+                <div class="news-summary">
+                    一个开源的 AI 对冲基金团队项目，使用多个 AI 代理进行投资分析和决策。该项目展示了 AI 在金融领域的应用潜力。
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://github.com/ruvnet/RuView" target="_blank">RuView: WiFi 信号实现人体姿态估计</a>
+                    <span class="confidence confidence-low">置信度: 低</span>
+                </div>
+                <div class="news-meta">
+                    <span>📍 来源: GitHub Trending</span>
+                    <span>⭐ 9,844 stars 本周</span>
+                    <span>🏷️ 标签: #WiFi #计算机视觉 #姿态估计</span>
+                </div>
+                <div class="news-summary">
+                    RuView 使用普通 WiFi 信号实现实时人体姿态估计、生命体征监测和存在检测，无需任何摄像头设备。这一技术突破为隐私敏感的监控场景提供了新方案。
+                </div>
+            </div>
+        </section>
+
+        <!-- 数据看板 -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-icon">📊</span>
+                <h2 class="section-title">数据看板</h2>
+            </div>
+            <div class="dashboard">
+                <div class="stat-card">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">今日资讯</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">高优先级</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">中优先级</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">GitHub Trending</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 冷幽默预警 -->
+        <section class="section joke-section">
+            <div class="section-header">
+                <span class="section-icon">❄️</span>
+                <h2 class="section-title">冷幽默预警</h2>
+            </div>
+            <div class="joke-content">
+                <p>🤖 问：AI 什么时候能通过图灵测试？</p>
+                <p style="margin-top: 15px;">💡 答：等它学会在开会时说"我完全同意"但心里想着"这主意太蠢了"的时候。</p>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>📡 科技芯声 · 每日科技简报</p>
+            <p style="margin-top: 10px;">🔗 GitHub Pages: <a href="https://evanfangyuan.github.io/tecdig/digest-20260312.html">https://evanfangyuan.github.io/tecdig/digest-20260312.html</a></p>
+            <p style="margin-top: 10px;">Made with 🤖 by OpenClaw</p>
+        </footer>
+    </div>
+</body>
+</html>
